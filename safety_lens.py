@@ -3,6 +3,7 @@ import mediapipe as mp
 import streamlit as st
 import numpy as np
 import time
+import os
 from datetime import datetime
 
 # Import MediaPipe Tasks API
@@ -26,6 +27,22 @@ def trigger_spoon_agent_incident():
     timestamp = datetime.now().strftime("%H:%M:%S")
     print(f"[{timestamp}] 🚨 Wait! Calling Spoon Agent via x402 to log incident on-chain...")
     return f"Incident logged at {timestamp} via Spoon Agent (x402)"
+
+def save_screenshot(frame):
+    """
+    Save a screenshot of the current frame when pause is triggered.
+    Saves to the screenshots/ folder with a timestamped filename.
+    """
+    screenshots_dir = "screenshots"
+    os.makedirs(screenshots_dir, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"incident_{timestamp}.jpg"
+    filepath = os.path.join(screenshots_dir, filename)
+
+    cv2.imwrite(filepath, frame)
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] 📸 Screenshot saved: {filepath}")
+    return filepath
 
 # --- Custom CSS for Animation & Styling ---
 def load_css():
@@ -186,6 +203,8 @@ def main():
         st.session_state.hazard_count_t = 0
     if 'hazard_count_b' not in st.session_state:
         st.session_state.hazard_count_b = 0
+    if 'hazard_latched' not in st.session_state:
+        st.session_state.hazard_latched = False
     
     # Header
     st.title("🛡️ Safety Lens: Active Sentinel")
@@ -208,11 +227,13 @@ def main():
                 st.session_state.hazard_count_r = 0
                 st.session_state.hazard_count_t = 0
                 st.session_state.hazard_count_b = 0
+                st.session_state.hazard_latched = False
                 st.rerun()
         else:
             if st.button("⏹️ EMERGENCY STOP / RESET", type="secondary", help="Stop the system and reset state"):
                 st.session_state.monitor_active = False
                 st.session_state.current_status = "SAFE"
+                st.session_state.hazard_latched = False
                 st.rerun()
 
         st.markdown("---")
@@ -338,6 +359,31 @@ def main():
                 fps_ph.write(f"FPS: {fps:.1f}")
                 frame_count_ph.write(f"Frames: {frame_count}")
             
+            # --- LATCHED HAZARD STATE ---
+            if st.session_state.get('hazard_latched'):
+                  # Update Dashboard UI to Stopped State
+                  vehicle_status_ph.markdown(
+                      '<div class="status-badge status-danger">🚫 STOPPED</div>', 
+                      unsafe_allow_html=True
+                  )
+                  machine_anim_ph.markdown(
+                      '<div class="machine-container"><div class="gear-icon stopped">⚙️</div><div style="text-align:center; color:red; font-weight:bold;">SYSTEM HALTED</div></div>', 
+                      unsafe_allow_html=True
+                  )
+
+                  cv2.putText(frame, "SYSTEM HALTED", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,255), 4)
+                  cv2.putText(frame, "PRESS 'RESET' TO RESUME", (50, 160), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 3)
+                  
+                  # Add a red border
+                  cv2.rectangle(frame, (0,0), (w,h), (0,0,255), 20)
+                  
+                  final_display_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                  video_ph.image(final_display_rgb, channels="RGB")
+                 
+                  # Optional: Small sleep to reduce CPU usage in halted state
+                  time.sleep(0.03) 
+                  continue
+
             # 1. Calculate Optical Flow (if we have a previous frame)
             pinch_detected = False
             avg_u_left = 0
@@ -704,15 +750,15 @@ def main():
                     log_msg = trigger_spoon_agent_incident()
                     st.session_state.incident_log.insert(0, log_msg)
                 
-                status_ph.error("🚨 CRUSH HAZARD!")
+                status_ph.error("🚨 CRUSH HAZARD! SYSTEM HALTED.")
                 
-                # LATCHING STOP: Trigger Stop and Break Loop
-                # Update visuals one last time before breaking
+                # LATCHING STOP: Set Latched Flag
+                st.session_state.hazard_latched = True
+                
+                # Update visuals immediately
                 final_frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 video_ph.image(final_frame_rgb, channels="RGB")
-                st.session_state.monitor_active = False
-                time.sleep(2) # Give user a moment to see the red frame
-                st.rerun()
+                continue
                 
             elif hand_detected:
                 # If Hand is present but no pinch, we can call it "WARNING" or keep SAFE
