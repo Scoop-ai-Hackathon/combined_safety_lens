@@ -309,6 +309,7 @@ def main():
     start_time = time.time()
     prev_gray = None
     prev_hand_area = None # For compression detection
+    prev_hand_centroid = None
     
     # Signal Buffers (For "Around the same time" logic)
     motion_buffer = 0
@@ -443,8 +444,27 @@ def main():
                         r_x2 = min(small_w, s_x_max + roi_w)
                         
                         # Thresholds (TUNED FOR ROBUSTNESS)
-                        velocity_thresh = 3.0 # Must be moving fast (was 1.0)
-                        pixel_thresh = 200    # Balanced (was 300, 150)
+                        velocity_thresh = 4.0 # Increased from 3.0 to ignore hand drift
+                        pixel_thresh = 400    # Increased from 200 to ignore small artifacts
+                        
+                        # --- HAND MOVEMENT SUPPRESSION ---
+                        # Calculate Hand Centroid Speed to ignore self-induced flow
+                        current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
+                        hand_speed = 0.0
+                        suppress_hazards = False
+                        
+                        if 'prev_hand_centroid' in locals() and prev_hand_centroid is not None:
+                             dist = np.sqrt((current_centroid[0]-prev_hand_centroid[0])**2 + 
+                                          (current_centroid[1]-prev_hand_centroid[1])**2)
+                             hand_speed = dist
+                             
+                             # If hand moves > 15 pixels/frame, assume flow is self-induced
+                             if hand_speed > 15.0:
+                                  suppress_hazards = True
+                                  cv2.putText(frame, "HAND MOVING - SUPPRESSED", (50, 230), 
+                                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (100,255,100), 2)
+                        
+                        prev_hand_centroid = current_centroid
                         
                         # Logic: Count pixels moving TOWARDS hand
                         moving_pixels_left = 0
@@ -478,9 +498,9 @@ def main():
                         # If Pixels Right move Left AND Pixels Left move Left -> Hand is moving Left -> IGNORE RIGHT HAZARD
                         translation_left = (moving_pixels_right > pixel_thresh) and (moving_pixels_left_away > pixel_thresh)
 
-                        # Determine ACTIVE states with cancellation
-                        left_active = (moving_pixels_left > pixel_thresh) and not translation_right
-                        right_active = (moving_pixels_right > pixel_thresh) and not translation_left
+                        # Determine ACTIVE states with cancellation AND suppression
+                        left_active = (moving_pixels_left > pixel_thresh) and not translation_right and not suppress_hazards
+                        right_active = (moving_pixels_right > pixel_thresh) and not translation_left and not suppress_hazards
 
                         # Visualize Left
                         d_x1, d_x2 = int(l_x1 / sx), int(l_x2 / sx)
@@ -536,8 +556,8 @@ def main():
                         translation_up = (moving_pixels_bottom > pixel_thresh) and (moving_pixels_top_away > pixel_thresh)
                         
                         # Determine Active
-                        top_active = (moving_pixels_top > pixel_thresh) and not translation_down
-                        bottom_active = (moving_pixels_bottom > pixel_thresh) and not translation_up
+                        top_active = (moving_pixels_top > pixel_thresh) and not translation_down and not suppress_hazards
+                        bottom_active = (moving_pixels_bottom > pixel_thresh) and not translation_up and not suppress_hazards
 
                         # Visualize Top
                         d_y1, d_y2 = int(t_y1 / sy), int(t_y2 / sy)
@@ -604,27 +624,30 @@ def main():
                              # This allows for "2 frames" gap that user mentioned
                              st.session_state.impact_frame_count = max(0, st.session_state.impact_frame_count - 1)
                         
-                        # Logic C: "Any Hazard" Aggressive Trigger - PER SIDE (User Request)
-                        # Must be the SAME side accumulating > 10 frames
+                        # Logic C: "Any Hazard" Aggressive Trigger - PER SIDE
+                        # User Request: "More or less 5 frames close to each other", summed separately.
+                        # Implementation: Leaky Bucket with +2 Increment / -1 Decay.
+                        # Threshold 10 => Equivalent to 5 consecutive frames, but allows gaps.
+                        
                         if 'hazard_count_l' not in st.session_state: st.session_state.hazard_count_l = 0
                         if 'hazard_count_r' not in st.session_state: st.session_state.hazard_count_r = 0
                         if 'hazard_count_t' not in st.session_state: st.session_state.hazard_count_t = 0
                         if 'hazard_count_b' not in st.session_state: st.session_state.hazard_count_b = 0
                         
                         # Left
-                        if left_active: st.session_state.hazard_count_l += 1
+                        if left_active: st.session_state.hazard_count_l += 2
                         else: st.session_state.hazard_count_l = max(0, st.session_state.hazard_count_l - 1)
                         
                         # Right
-                        if right_active: st.session_state.hazard_count_r += 1
+                        if right_active: st.session_state.hazard_count_r += 2
                         else: st.session_state.hazard_count_r = max(0, st.session_state.hazard_count_r - 1)
                         
                         # Top
-                        if top_active: st.session_state.hazard_count_t += 1
+                        if top_active: st.session_state.hazard_count_t += 2
                         else: st.session_state.hazard_count_t = max(0, st.session_state.hazard_count_t - 1)
 
                         # Bottom
-                        if bottom_active: st.session_state.hazard_count_b += 1
+                        if bottom_active: st.session_state.hazard_count_b += 2
                         else: st.session_state.hazard_count_b = max(0, st.session_state.hazard_count_b - 1)
                         
                         # Max threat level
@@ -633,13 +656,15 @@ def main():
                                          st.session_state.hazard_count_t,
                                          st.session_state.hazard_count_b)
                         
+                        # Visualize Hazard Building
                         if max_hazard > 0:
-                             cv2.putText(frame, f"HAZARD! {max_hazard}", (50, 170), 
-                                       cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,165,255), 2)
+                             # Display the count to the user so they can see it building up
+                             cv2.putText(frame, f"HAZARD LVL: {max_hazard}/10", (50, 170), 
+                                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,165,255), 2)
                              
-                        if max_hazard > 5: # Tuned to 5 frames (Per Side) - (Was 4, User Req)
+                        if max_hazard >= 10: # Threshold 10 (approx 5 detect frames @ +2 weight)
                             pinch_detected = True
-                            cv2.putText(frame, "FAST STOP", (50, 200), 
+                            cv2.putText(frame, "FAST SIDE HAZARD", (50, 200), 
                                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255), 2)
                         
                         # Logic A Result (Pincer Only - Fast Trigger)
