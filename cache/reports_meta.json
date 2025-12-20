@@ -1,0 +1,288 @@
+[
+  {
+    "id": "SL-20251221-025039",
+    "incident_time": "2025-12-21 02:50:39",
+    "created_at": "2025-12-21T02:50:39.450157",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-025039.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-025039.jpg",
+    "risk_level": "high",
+    "pass_status": false,
+    "workplace_type": "주거시설 (단독주택 또는 다세대 주택)",
+    "violations_count": 3,
+    "compliant_count": 1,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "건축법 위반",
+          "item": "무단 증축",
+          "severity": "high",
+          "description": "도면에 배란다 부분이 위반 건축물(무단 증축)로 표기되어 있음. 철근 콘크리트 구조로 무단 증축된 것으로 추정되며 이는 건폐율 및 용적률 위반, 구조 안전 문제, 피난 안전 문제 등을 야기할 수 있음.",
+          "rule": "건축법 제14조 (건축신고), 건축법 제48조 (구조 내력)",
+          "recommendation": "무단 증축 부분 철거 또는 관할 관청에 적법한 절차에 따라 허가/신고 진행. 구조 안전 검토 필요."
+        },
+        {
+          "category": "피난 안전",
+          "item": "피난 동선 확보 미흡 가능성",
+          "severity": "medium",
+          "description": "무단 증축으로 인해 기존 거실에서의 피난 동선이 변경되었을 가능성이 있으며, 피난 거리가 증가하거나 피난 통로 폭이 좁아지는 등 피난 안전에 문제가 발생할 수 있음.",
+          "rule": "건축법 시행령 제34조 (피난 거리), 건축법 시행령 제15조의2 (복도 폭)",
+          "recommendation": "피난 시뮬레이션을 통해 피난 안전성을 검토하고, 피난 동선 확보를 위한 개선 필요."
+        },
+        {
+          "category": "건폐율/용적률",
+          "item": "건폐율/용적률 초과",
+          "severity": "high",
+          "description": "무단 증축으로 인하여 건폐율 및 용적률이 법정 기준을 초과했을 가능성이 높음. 이는 건축법에 위반되는 사항임.",
+          "rule": "건축법 제55조 (건폐율), 건축법 제56조 (용적률)",
+          "recommendation": "건축물 대장과 실제 건축물의 면적을 비교하여 건폐율 및 용적률 준수 여부를 확인하고, 초과 시 시정 조치 필요."
+        }
+      ],
+      "immediate_actions": [
+        "무단 증축 부분의 사용 중단",
+        "관할 관청에 무단 증축 사실 자진 신고 및 시정 계획 제출"
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-024909",
+    "incident_time": "2025-12-21 02:49:09",
+    "created_at": "2025-12-21T02:49:09.473442",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-024909.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-024909.jpg",
+    "risk_level": "high",
+    "pass_status": false,
+    "workplace_type": "단독주택 (추정)",
+    "violations_count": 3,
+    "compliant_count": 1,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "건축법",
+          "item": "무단 증축",
+          "severity": "high",
+          "description": "평면도 상에 '위반건축물(철근콘크리트구조, 무단증축면적: ㎡, 주거) 추정'으로 표기된 영역이 존재합니다. 해당 부분은 건축법에 위배되는 무단 증축으로 판단됩니다. 베란다 부분을 무단으로 확장하여 주거 공간으로 사용하는 것으로 보입니다.",
+          "rule": "건축법 제14조 (건축허가)",
+          "recommendation": "해당 무단 증축 부분에 대한 철거 또는 합법적인 절차에 따른 변경 허가를 진행해야 합니다. 무단 증축 면적을 정확히 산정하고, 관련 법규에 따라 필요한 조치를 취해야 합니다."
+        },
+        {
+          "category": "피난 안전",
+          "item": "피난 거리 제한",
+          "severity": "medium",
+          "description": "무단 증축으로 인해 거실 또는 침실에서 주 출입구까지의 피난 거리가 증가했을 가능성이 있습니다. 이는 피난 안전에 위협을 가할 수 있습니다.",
+          "rule": "건축법 시행령 제34조 (직통계단의 설치)",
+          "recommendation": "변경된 평면을 기준으로 피난 거리를 재검토하고, 필요한 경우 추가적인 피난 설비(예: 스프링클러, 피난 유도등)를 설치하거나 피난 경로를 변경해야 합니다."
+        },
+        {
+          "category": "건폐율/용적률",
+          "item": "건폐율/용적률 초과",
+          "severity": "medium",
+          "description": "무단 증축으로 인해 건폐율 및 용적률이 법정 기준을 초과했을 가능성이 있습니다.",
+          "rule": "건축법 제55조 (건폐율)",
+          "recommendation": "증축된 면적을 포함하여 건폐율 및 용적률을 재산정하고, 만약 기준을 초과한다면 이에 대한 해결 방안(예: 일부 철거)을 모색해야 합니다."
+        }
+      ],
+      "immediate_actions": [
+        "무단 증축 부분의 사용을 즉시 중단하고 안전 점검을 실시합니다.",
+        "건축 전문가와 상담하여 무단 증축 해결 방안을 모색합니다."
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-024649",
+    "incident_time": "2025-12-21 02:46:49",
+    "created_at": "2025-12-21T02:46:49.061871",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-024649.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-024649.jpg",
+    "risk_level": "high",
+    "pass_status": false,
+    "workplace_type": "Residential Building/House",
+    "violations_count": 3,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "Building Code Violation",
+          "item": "Unauthorized Expansion/Construction (Violation Building)",
+          "severity": "high",
+          "description": "The plan indicates \"Violation Building\" which means an unauthorized construction or expansion. This violates building codes and regulations regarding permitted building area, zoning, and approved architectural plans.",
+          "rule": "Related building codes and zoning regulations",
+          "recommendation": "Submit revised plan or remove illegal expansion immediately and make compliant with all the respective regulations."
+        },
+        {
+          "category": "Fire Safety",
+          "item": "Insufficient Egress Route from Violation Area",
+          "severity": "medium",
+          "description": "The addition of a room or expansion can lead it to be far away from the main exit routes.  If the new construction doesn't have the minimum means of egress, there can be a violation.",
+          "rule": " 건축법 시행령 제34조",
+          "recommendation": "Check the maximum travel distance to a means of egress. Make sure that the expansion fulfills the minimum requirement."
+        },
+        {
+          "category": "Construction Safety",
+          "item": "Structural Stability of Violation Building",
+          "severity": "medium",
+          "description": "As the Violation Building is an illegal construction, there may be no verification of its structural integrity, which violates Construction Act and other regulation.",
+          "rule": " 건축법 제48조",
+          "recommendation": "Check structural integrity or remove the illegal building immediately and comply to the structural rule."
+        }
+      ],
+      "immediate_actions": [
+        "Stop illegal constructions",
+        "Evacuate area if further inspections confirm structural instability.",
+        "Communicate all safety concerns and corrective actions to relevant workers."
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-023249",
+    "incident_time": "2025-12-21 02:32:49",
+    "created_at": "2025-12-21T02:32:49.653291",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-023249.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-023249.jpg",
+    "risk_level": "medium",
+    "pass_status": false,
+    "workplace_type": "제조공장",
+    "violations_count": 3,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "보호구",
+          "item": "안전모",
+          "rule": "산업안전보건기준 제32조",
+          "description": "물체가 떨어지거나 날아올 위험이 있는 작업장에서 안전모 미착용",
+          "severity": "medium",
+          "recommendation": "작업자에게 안전모를 착용하도록 교육하고, 작업장 내 안전모 착용 의무화"
+        },
+        {
+          "category": "보호구",
+          "item": "안전화",
+          "rule": "산업안전보건기준 제32조",
+          "description": "물체의 낙하, 충격 또는 날카로운 물체에 의한 위험이 있는 작업장에서 안전화 미착용",
+          "severity": "medium",
+          "recommendation": "작업자에게 안전화를 착용하도록 교육하고, 작업장 내 안전화 착용 의무화"
+        },
+        {
+          "category": "전기안전",
+          "item": "배선",
+          "rule": "산업안전보건기준 제311조",
+          "description": "전선 정리 미흡 및 피복 손상 여부 확인 필요",
+          "severity": "medium",
+          "recommendation": "노출된 전선은 정리하고 손상된 피복은 즉시 교체"
+        }
+      ],
+      "immediate_actions": [
+        "안전모 및 안전화 지급 및 착용 교육 실시",
+        "노출된 전선 정리 및 피복 손상 점검/교체"
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-022632",
+    "incident_time": "2025-12-21 02:26:28",
+    "created_at": "2025-12-21T02:26:32.908629",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-022632.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-022632.jpg",
+    "risk_level": "medium",
+    "pass_status": false,
+    "workplace_type": "사무실",
+    "violations_count": 1,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "기계안전",
+          "item": "방호장치",
+          "rule": "산업안전보건기준 제87조",
+          "description": "\"CRUSH HAZARD!\" 경고문구가 보이는 것으로 보아 누르는 형태의 위험이 있으며, 적절한 방호장치가 설치되지 않았을 가능성이 있음.",
+          "severity": "high",
+          "recommendation": "누르는 형태의 위험요소에 대한 방호 덮개 혹은 안전장치를 설치하고, 작업 전 안전 점검을 실시해야 함."
+        }
+      ],
+      "immediate_actions": [
+        "누르는 형태의 위험요소를 식별하고, 해당 위험을 제거하거나 통제하기 위한 조치를 즉시 시행해야 함."
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-022338",
+    "incident_time": "2025-12-21 02:23:33",
+    "created_at": "2025-12-21T02:23:38.421549",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-022338.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-022338.jpg",
+    "risk_level": "high",
+    "pass_status": false,
+    "workplace_type": "미확인 (이미지 정보 부족)",
+    "violations_count": 1,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "보호구",
+          "item": "안전장갑",
+          "rule": "산업안전보건기준 제32조",
+          "description": "이미지 내 'CRUSH HAZARD!' 경고와 함께 손이 노출되어 있어, 압착 위험에 대한 안전장갑 미착용이 확인됨. 고온/저온 물체 취급 여부는 이미지 정보 부족으로 판단 불가.",
+          "severity": "high",
+          "recommendation": "압착 위험 작업 시 반드시 안전장갑 착용. 작업 전 위험성 평가 실시 및 적절한 보호구 지급/착용 교육 필요."
+        }
+      ],
+      "immediate_actions": [
+        "압착 위험으로부터 작업자 보호를 위한 안전조치 즉시 실시",
+        "해당 작업 중지 및 안전 점검 실시"
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-021605",
+    "incident_time": "2025-12-21 02:16:01",
+    "created_at": "2025-12-21T02:16:05.947995",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-021605.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-021605.jpg",
+    "risk_level": "medium",
+    "pass_status": false,
+    "workplace_type": "Unknown",
+    "violations_count": 1,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "보호구",
+          "item": "안전장갑",
+          "rule": "산업안전보건기준 제32조",
+          "description": "작업 내용이 특정되지 않았으나, crush hazard 경고 문구로 보아 위험한 작업을 수행할 가능성이 있음에도 안전장갑을 착용하지 않음.",
+          "severity": "medium",
+          "recommendation": "작업에 적합한 안전장갑을 착용하십시오."
+        }
+      ],
+      "immediate_actions": [
+        "작업 내용 파악 및 적절한 안전장갑 즉시 착용"
+      ]
+    }
+  },
+  {
+    "id": "SL-20251221-020741",
+    "incident_time": "2025-12-21 02:07:37",
+    "created_at": "2025-12-21T02:07:41.758823",
+    "html_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\reports\\safety_report_SL-20251221-020741.html",
+    "capture_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\captures\\capture_SL-20251221-020741.jpg",
+    "risk_level": "medium",
+    "pass_status": false,
+    "workplace_type": "불명 (이미지만으로는 판단 불가)",
+    "violations_count": 1,
+    "compliant_count": 0,
+    "analysis_summary": {
+      "violations": [
+        {
+          "category": "보호구",
+          "item": "안전장갑",
+          "rule": "산업안전보건기준 제32조",
+          "description": "압착 위험(CRUSH HAZARD)이 있는 경우 안전장갑 미착용",
+          "severity": "high",
+          "recommendation": "압착 위험 작업 시 안전 장갑을 반드시 착용하십시오."
+        }
+      ],
+      "immediate_actions": [
+        "압착 위험 작업 시 즉시 안전 장갑 착용"
+      ]
+    }
+  }
+]
