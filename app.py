@@ -1382,7 +1382,7 @@ def render_realtime_sentinel():
     )
 
     if not ctx.state.playing:
-        video_ph.info("📷 카메라 연결 중... START 버튼을 눌러주세요.")
+        video_ph.info("📷 카메라 연결 대기 중...")
         return
 
     detector = get_detector()
@@ -1399,7 +1399,6 @@ def render_realtime_sentinel():
 
     try:
         while st.session_state.monitor_active and ctx.state.playing:
-            # Get frame from WebRTC processor
             if ctx.video_processor is None:
                 time.sleep(0.03)
                 continue
@@ -1659,7 +1658,7 @@ def render_realtime_sentinel():
             video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 
     finally:
-        pass  # WebRTC handles cleanup automatically
+        pass  # WebRTC handles cleanup
 
 # ==================== Page 2: Image Analysis ====================
 
