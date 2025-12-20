@@ -1354,9 +1354,18 @@ def render_realtime_sentinel():
             return
 
     # Active Monitoring Loop
-    ctx = webrtc_streamer(key="cam", mode=WebRtcMode.SENDRECV, rtc_configuration=RTC_CONFIGURATION, video_processor_factory=FrameProcessor, media_stream_constraints={"video": True, "audio": False})
+    ctx = webrtc_streamer(
+        key="safety-cam",
+        mode=WebRtcMode.SENDRECV,
+        rtc_configuration=RTC_CONFIGURATION,
+        video_processor_factory=FrameProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        desired_playing_state=st.session_state.monitor_active,
+        video_html_attrs={"style": {"display": "none"}},
+        async_processing=True
+    )
     if not ctx.state.playing:
-        video_ph.info("📷 카메라 연결 대기 중...")
+        video_ph.info("📷 START 버튼을 누르면 카메라가 시작됩니다.")
         return
 
     detector = get_detector()
