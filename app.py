@@ -11,6 +11,8 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+import threading, av
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
 
 # Import MediaPipe Tasks API
 from mediapipe.tasks import python
@@ -1203,6 +1205,15 @@ def get_detector():
     )
     return vision.HandLandmarker.create_from_options(options)
 
+RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}, {"urls": ["turn:safetylens.store:3478"], "username": "webrtcuser", "credential": "webrtcpass"}]})
+class FrameProcessor(VideoProcessorBase):
+    def __init__(self): self.frame, self.lock = None, threading.Lock()
+    def recv(self, f):
+        with self.lock: self.frame = f.to_ndarray(format="bgr24")
+        return f
+    def get_frame(self):
+        with self.lock: return self.frame.copy() if self.frame is not None else None
+
 # ==================== Page 1: Real-time Sentinel ====================
 
 def render_realtime_sentinel():
@@ -1343,11 +1354,9 @@ def render_realtime_sentinel():
             return
 
     # Active Monitoring Loop
-    cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
-
-    if not cap.isOpened():
-        st.error(f"Could not access webcam at Index {camera_index}.")
-        st.session_state.monitor_active = False
+    ctx = webrtc_streamer(key="cam", mode=WebRtcMode.SENDRECV, rtc_configuration=RTC_CONFIGURATION, video_processor_factory=FrameProcessor, media_stream_constraints={"video": True, "audio": False})
+    if not ctx.state.playing:
+        video_ph.info("📷 카메라 연결 대기 중...")
         return
 
     detector = get_detector()
@@ -1363,11 +1372,11 @@ def render_realtime_sentinel():
     squeeze_buffer = 0
 
     try:
-        while st.session_state.monitor_active:
-            ret, frame = cap.read()
-            if not ret:
-                st.error("Failed to retrieve frame.")
-                break
+        while st.session_state.monitor_active and ctx.state.playing:
+            frame = ctx.video_processor.get_frame() if ctx.video_processor else None
+            if frame is None:
+                time.sleep(0.03)
+                continue
 
             h, w, c = frame.shape
             small_w, small_h = 320, 240
@@ -1620,7 +1629,7 @@ def render_realtime_sentinel():
             video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 
     finally:
-        cap.release()
+        pass
 
 # ==================== Page 2: Image Analysis ====================
 
