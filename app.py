@@ -1394,22 +1394,14 @@ def render_realtime_sentinel():
     squeeze_buffer = 0
 
     try:
-        last_process_time = 0
-        process_interval = 0.05  # 20 FPS max
         while st.session_state.monitor_active and ctx.state.playing:
-            current_time = time.time()
-            if current_time - last_process_time < process_interval:
-                time.sleep(0.01)
-                continue
-            last_process_time = current_time
-
             frame = ctx.video_processor.get_frame() if ctx.video_processor else None
             if frame is None:
-                time.sleep(0.03)
+                time.sleep(0.02)
                 continue
 
             h, w, c = frame.shape
-            small_w, small_h = 320, 240
+            small_w, small_h = 256, 192
             frame_small = cv2.resize(frame, (small_w, small_h))
             gray_small = cv2.cvtColor(frame_small, cv2.COLOR_BGR2GRAY)
 
@@ -1500,7 +1492,7 @@ def render_realtime_sentinel():
             pinch_detected = False
 
             if prev_gray is not None:
-                flow = cv2.calcOpticalFlowFarneback(prev_gray, gray_small, None, 0.5, 2, 10, 2, 5, 1.1, 0)
+                flow = cv2.calcOpticalFlowFarneback(prev_gray, gray_small, None, 0.5, 1, 8, 2, 5, 1.1, 0)
             prev_gray = gray_small
 
             # Hand Detection
@@ -1533,7 +1525,7 @@ def render_realtime_sentinel():
 
                         if prev_hand_area:
                             percent_change = (current_area - prev_hand_area) / prev_hand_area
-                            if percent_change < -0.05:
+                            if percent_change < -0.03:
                                 compression_detected = True
                                 cv2.putText(frame, "SQUEEZE!", (x_min, y_min-30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                         prev_hand_area = current_area
@@ -1542,14 +1534,14 @@ def render_realtime_sentinel():
                         if 'flow' in locals():
                             s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                             s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
-                            roi_w = int(100 * sx)
-                            velocity_thresh, pixel_thresh = 4.0, 400
+                            roi_w = int(80 * sx)
+                            velocity_thresh, pixel_thresh = 2.5, 200
 
                             current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                             suppress_hazards = False
                             if prev_hand_centroid:
                                 dist = np.sqrt((current_centroid[0]-prev_hand_centroid[0])**2 + (current_centroid[1]-prev_hand_centroid[1])**2)
-                                if dist > 15.0:
+                                if dist > 25.0:
                                     suppress_hazards = True
                             prev_hand_centroid = current_centroid
 
@@ -1574,7 +1566,7 @@ def render_realtime_sentinel():
                             right_active = (moving_pixels_right > pixel_thresh) and not translation_left and not suppress_hazards
 
                             # Vertical
-                            roi_h = int(100 * sy)
+                            roi_h = int(80 * sy)
                             t_y1, t_y2 = max(0, s_y_min - roi_h), s_y_min
                             b_y1, b_y2 = s_y_max, min(small_h, s_y_max + roi_h)
 
@@ -1597,8 +1589,8 @@ def render_realtime_sentinel():
 
                             # Hazard Detection
                             any_motion_active = left_active or right_active or top_active or bottom_active
-                            if any_motion_active: motion_buffer = 5
-                            if compression_detected: squeeze_buffer = 5
+                            if any_motion_active: motion_buffer = 8
+                            if compression_detected: squeeze_buffer = 8
                             motion_buffer = max(0, motion_buffer - 1)
                             squeeze_buffer = max(0, squeeze_buffer - 1)
                             buffered_trigger = (motion_buffer > 0) and (squeeze_buffer > 0)
@@ -1610,19 +1602,19 @@ def render_realtime_sentinel():
                             if buffered_trigger: st.session_state.impact_frame_count += 1
                             else: st.session_state.impact_frame_count = max(0, st.session_state.impact_frame_count - 1)
 
-                            if left_active: st.session_state.hazard_count_l += 2
+                            if left_active: st.session_state.hazard_count_l += 3
                             else: st.session_state.hazard_count_l = max(0, st.session_state.hazard_count_l - 1)
-                            if right_active: st.session_state.hazard_count_r += 2
+                            if right_active: st.session_state.hazard_count_r += 3
                             else: st.session_state.hazard_count_r = max(0, st.session_state.hazard_count_r - 1)
-                            if top_active: st.session_state.hazard_count_t += 2
+                            if top_active: st.session_state.hazard_count_t += 3
                             else: st.session_state.hazard_count_t = max(0, st.session_state.hazard_count_t - 1)
-                            if bottom_active: st.session_state.hazard_count_b += 2
+                            if bottom_active: st.session_state.hazard_count_b += 3
                             else: st.session_state.hazard_count_b = max(0, st.session_state.hazard_count_b - 1)
 
                             max_hazard = max(st.session_state.hazard_count_l, st.session_state.hazard_count_r, st.session_state.hazard_count_t, st.session_state.hazard_count_b)
-                            if max_hazard >= 10: pinch_detected = True
-                            if st.session_state.pinch_frame_count > 3: pinch_detected = True
-                            if st.session_state.impact_frame_count > 12: pinch_detected = True
+                            if max_hazard >= 6: pinch_detected = True
+                            if st.session_state.pinch_frame_count > 2: pinch_detected = True
+                            if st.session_state.impact_frame_count > 8: pinch_detected = True
 
             # Update State
             if pinch_detected:
