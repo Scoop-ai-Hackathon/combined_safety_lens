@@ -1369,12 +1369,11 @@ def render_realtime_sentinel():
     # Active Monitoring Loop
     ctx = webrtc_streamer(
         key="safety-cam",
-        mode=WebRtcMode.SENDRECV,
+        mode=WebRtcMode.SENDONLY,
         rtc_configuration=RTC_CONFIGURATION,
         video_frame_callback=video_frame_callback,
-        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 30}, "audio": False},
-        desired_playing_state=st.session_state.monitor_active,
-        async_processing=True
+        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 24}, "audio": False},
+        desired_playing_state=st.session_state.monitor_active
     )
     if not ctx.state.playing:
         video_ph.info("📷 START 버튼을 누르면 카메라가 시작됩니다.")
