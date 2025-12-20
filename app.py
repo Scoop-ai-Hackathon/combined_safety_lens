@@ -57,6 +57,14 @@ def load_css():
         /* ===== Global Styles ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
+        /* Hide WebRTC container */
+        [data-testid="stVerticalBlock"] > div:has(iframe[title*="webrtc"]),
+        .stWebRtc, div[data-testid="stWebRtc"] {
+            display: none !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
         .stApp {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             font-family: 'Noto Sans KR', 'Segoe UI', sans-serif;
@@ -1207,12 +1215,17 @@ def get_detector():
 
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}, {"urls": ["turn:safetylens.store:3478"], "username": "webrtcuser", "credential": "webrtcpass"}]})
 class FrameProcessor(VideoProcessorBase):
-    def __init__(self): self.frame, self.lock = None, threading.Lock()
-    def recv(self, f):
-        with self.lock: self.frame = f.to_ndarray(format="bgr24")
-        return f
+    def __init__(self):
+        self.frame = None
+        self.lock = threading.Lock()
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        with self.lock:
+            self.frame = img
+        return frame
     def get_frame(self):
-        with self.lock: return self.frame.copy() if self.frame is not None else None
+        with self.lock:
+            return self.frame.copy() if self.frame is not None else None
 
 # ==================== Page 1: Real-time Sentinel ====================
 
@@ -1381,7 +1394,15 @@ def render_realtime_sentinel():
     squeeze_buffer = 0
 
     try:
+        last_process_time = 0
+        process_interval = 0.05  # 20 FPS max
         while st.session_state.monitor_active and ctx.state.playing:
+            current_time = time.time()
+            if current_time - last_process_time < process_interval:
+                time.sleep(0.01)
+                continue
+            last_process_time = current_time
+
             frame = ctx.video_processor.get_frame() if ctx.video_processor else None
             if frame is None:
                 time.sleep(0.03)
