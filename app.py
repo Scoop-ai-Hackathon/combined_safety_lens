@@ -1313,15 +1313,16 @@ class SafetyVideoProcessor(VideoProcessorBase):
                     if flow is not None:
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
-                        roi_w = int(100 * sx)
-                        # 민감도 향상: 임계값 낮춤
-                        velocity_thresh, pixel_thresh = 2.5, 200
+                        roi_w = int(120 * sx)  # ROI 영역 확대
+                        # 민감도 대폭 향상: 임계값 크게 낮춤
+                        velocity_thresh, pixel_thresh = 1.5, 100
 
                         current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                         suppress_hazards = False
                         if self.prev_hand_centroid:
                             dist = np.sqrt((current_centroid[0]-self.prev_hand_centroid[0])**2 + (current_centroid[1]-self.prev_hand_centroid[1])**2)
-                            if dist > 15.0:
+                            # 억제 임계값 높여서 더 쉽게 감지되게
+                            if dist > 30.0:
                                 suppress_hazards = True
                         self.prev_hand_centroid = current_centroid
 
@@ -1377,20 +1378,21 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         if buffered_trigger: self.impact_frame_count += 1
                         else: self.impact_frame_count = max(0, self.impact_frame_count - 1)
 
-                        if left_active: self.hazard_count_l += 2
+                        # 카운터 증가 속도 향상
+                        if left_active: self.hazard_count_l += 3
                         else: self.hazard_count_l = max(0, self.hazard_count_l - 1)
-                        if right_active: self.hazard_count_r += 2
+                        if right_active: self.hazard_count_r += 3
                         else: self.hazard_count_r = max(0, self.hazard_count_r - 1)
-                        if top_active: self.hazard_count_t += 2
+                        if top_active: self.hazard_count_t += 3
                         else: self.hazard_count_t = max(0, self.hazard_count_t - 1)
-                        if bottom_active: self.hazard_count_b += 2
+                        if bottom_active: self.hazard_count_b += 3
                         else: self.hazard_count_b = max(0, self.hazard_count_b - 1)
 
                         max_hazard = max(self.hazard_count_l, self.hazard_count_r, self.hazard_count_t, self.hazard_count_b)
-                        # 민감도 향상: 임계값 낮춤
-                        if max_hazard >= 6: pinch_detected = True
-                        if self.pinch_frame_count > 2: pinch_detected = True
-                        if self.impact_frame_count > 6: pinch_detected = True
+                        # 민감도 대폭 향상: 임계값 크게 낮춤
+                        if max_hazard >= 4: pinch_detected = True
+                        if self.pinch_frame_count > 1: pinch_detected = True
+                        if self.impact_frame_count > 3: pinch_detected = True
 
         if pinch_detected:
             with self.lock:
@@ -1562,9 +1564,10 @@ def render_realtime_sentinel():
                     key=f"download_stopped_{st.session_state.report_id or 'none'}"
                 )
         else:
-            # WebRTC 자체 버튼 숨기기
+            # WebRTC 컨트롤 바, 흰색 빈틈 제거 및 영상 꽉 차게
             st.markdown("""
             <style>
+            /* WebRTC 버튼 숨기기 */
             [data-testid="stButton"] button[kind="secondary"] {
                 display: none !important;
             }
@@ -1573,6 +1576,33 @@ def render_realtime_sentinel():
             }
             div[data-testid="column"] button:has(svg) {
                 display: none !important;
+            }
+            /* WebRTC 컨트롤 바 숨기기 */
+            .stVideo > div > div:last-child,
+            video + div,
+            [class*="controls"],
+            .streamlit-webrtc-component > div > div:nth-child(2) {
+                display: none !important;
+            }
+            /* 비디오 컨테이너 스타일 */
+            .streamlit-webrtc-component {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .streamlit-webrtc-component video {
+                border-radius: 10px;
+                width: 100% !important;
+                max-height: 480px !important;
+                object-fit: cover !important;
+            }
+            /* 흰색 빈틈 제거 */
+            .element-container:has(.streamlit-webrtc-component) {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            iframe[title="streamlit_webrtc.component"] {
+                border: none !important;
+                padding: 0 !important;
             }
             </style>
             """, unsafe_allow_html=True)
