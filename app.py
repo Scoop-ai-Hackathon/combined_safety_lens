@@ -19,7 +19,7 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 # WebRTC for browser camera access
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
 
 # Load environment variables
 load_dotenv()
@@ -1428,12 +1428,14 @@ class SafetyVideoProcessor(VideoProcessorBase):
         return frame
 
 # WebRTC Configuration for STUN/TURN servers
-RTC_CONFIGURATION = {
-    "iceServers": [
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [
         {"urls": ["stun:stun.l.google.com:19302"]},
-        {"urls": ["stun:stun1.l.google.com:19302"]},
-    ]
-}
+        {"urls": ["turn:safetylens.store:3478"],
+         "username": "webrtcuser",
+         "credential": "webrtcpass"}
+    ]}
+)
 
 # ==================== Page 1: Real-time Sentinel ====================
 
