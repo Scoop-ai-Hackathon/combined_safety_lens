@@ -1,0 +1,179 @@
+[
+  {
+    "id": "c9ca242c-7387-4f7d-af98-d652c0d2564a",
+    "content": {
+      "filename": "test_factory.jpg",
+      "file_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\uploads\\da9dcb46-dfab-460a-bfb0-a1201c1f54c5.jpg",
+      "analysis": {
+        "workplace_type": "제조공장",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체가 떨어지거나 날아올 위험이 있는 작업장으로 추정되나, 안전모 미착용.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전모를 착용하도록 지도 및 감독."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체의 낙하, 충격 또는 날카로운 물체에 의한 위험이 있는 작업장으로 추정되나, 안전화 착용 여부 확인 불가.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전화 착용 권고 및 착용 여부 확인."
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준 제32조",
+            "description": "전선 작업 등으로 날카로운 물체를 취급할 가능성이 있으나, 안전장갑 미착용.",
+            "severity": "medium",
+            "recommendation": "작업 내용에 맞는 안전장갑을 착용하도록 지도 및 감독."
+          },
+          {
+            "category": "전기안전",
+            "item": "배선",
+            "rule": "산업안전보건기준 제311조",
+            "description": "전선이 노출되어 있고 정리가 미흡하여 감전 위험이 있음. 전선 피복 손상 여부 확인 필요.",
+            "severity": "high",
+            "recommendation": "노출된 전선을 정리하고 피복 손상 여부를 점검하여 보수하고 케이블 트레이를 활용하여 배선 정리. 접지 상태 확인."
+          }
+        ],
+        "immediate_actions": [
+          "노출된 전선 즉시 정리 및 절연 조치",
+          "안전모, 안전화, 안전장갑 등 개인 보호구 착용 확인 및 지급"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 실시 및 작업자 안전 교육 강화",
+          "정기적인 안전보건 교육 실시",
+          "작업 환경 개선을 통해 잠재적 위험 요인 제거"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-21T01:29:52.436371"
+      }
+    },
+    "created_at": "2025-12-21T01:29:52.436371",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "ef5c2d92-dca0-4146-bcdb-435695ecefbe",
+    "content": {
+      "filename": "test_factory.jpg",
+      "file_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\uploads\\b95289c6-27d7-4a47-af70-d171aa4dd3f3.jpg",
+      "analysis": {
+        "workplace_type": "제조 공장",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체가 떨어지거나 날아올 위험이 있는 작업장으로 추정되나 안전모 미착용",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전모 착용 의무화"
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체의 낙하, 충격 또는 날카로운 물체에 의한 위험이 있는 작업장으로 추정되나 안전화 착용 여부 확인 불가",
+            "severity": "low",
+            "recommendation": "작업 환경에 적합한 안전화 착용 권고"
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준 제32조",
+            "description": "전선 등 날카로운 물체를 취급할 가능성이 있으나 안전장갑 착용 여부 확인 불가",
+            "severity": "low",
+            "recommendation": "날카로운 물체 취급 시 안전장갑 착용 권고"
+          },
+          {
+            "category": "전기안전",
+            "item": "배선",
+            "rule": "산업안전보건기준 제311조",
+            "description": "전선이 노출되어 있고, 정리되지 않아 감전 및 화재의 위험이 있음",
+            "severity": "medium",
+            "recommendation": "노출된 전선을 정리하고, 피복이 손상된 전선은 즉시 교체"
+          }
+        ],
+        "immediate_actions": [
+          "노출된 전선 정리 및 피복 손상된 전선 교체"
+        ],
+        "recommendations": [
+          "작업 전 안전점검 실시",
+          "정기적인 안전보건 교육 실시"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-21T01:18:57.115517"
+      }
+    },
+    "created_at": "2025-12-21T01:18:57.116513",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "1d202d0f-d703-48bd-beb4-4796e47eeda2",
+    "content": {
+      "filename": "test_factory.jpg",
+      "file_path": "C:\\Users\\orvos\\safety-lens-final\\safety-lens\\uploads\\430193f9-7479-4987-bb6b-4598dfcbb1a0.jpg",
+      "analysis": {
+        "workplace_type": "제조공장",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체가 떨어지거나 날아올 위험이 있는 작업장이지만 안전모를 착용하지 않음.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전모를 착용하도록 지도하고, 안전모 착용을 의무화하는 규정을 마련해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준 제32조",
+            "description": "물체의 낙하, 충격 또는 날카로운 물체에 의한 위험이 있는 작업장이지만 안전화를 착용하지 않음.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전화를 착용하도록 지도하고, 안전화 착용을 의무화하는 규정을 마련해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준 제32조",
+            "description": "전선 작업 시 날카로운 물체를 취급할 위험이 있으나, 안전장갑을 착용하지 않음.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전장갑을 착용하도록 교육하고, 안전장갑 착용을 의무화해야 함."
+          },
+          {
+            "category": "전기안전",
+            "item": "배선",
+            "rule": "산업안전보건기준 제311조",
+            "description": "전선이 노출되어 있고 정리가 미흡하여 감전 위험이 있음.",
+            "severity": "medium",
+            "recommendation": "노출된 전선을 정리하고, 절연 처리를 강화해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "안전모 및 안전화 즉시 착용",
+          "노출된 전선 정리 및 절연 처리"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 실시",
+          "작업자 안전 교육 강화"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-21T01:12:09.776293"
+      }
+    },
+    "created_at": "2025-12-21T01:12:09.776293",
+    "type": "safety_analysis"
+  }
+]

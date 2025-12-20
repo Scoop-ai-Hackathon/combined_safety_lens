@@ -1,0 +1,1937 @@
+[
+  {
+    "id": "573d8de4-da21-4ef4-bc45-c5f43389a7dd",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "b2e55734-7872-4cb3-a931-1e390fd0d7f7",
+        "filename": "b2e55734-7872-4cb3-a931-1e390fd0d7f7.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/b2e55734-7872-4cb3-a931-1e390fd0d7f7.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "workplace_type": "제조/조립 작업장",
+        "workplace_description": "자동차 부품 조립 또는 테스트 작업장으로 보임. 전선 및 전자 부품 다수 존재.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "물체가 떨어지거나 날아올 위험이 있는 작업장으로 판단되나 안전모 미착용.",
+            "severity": "medium",
+            "recommendation": "작업자는 안전모를 착용하고, 관리자는 작업 전 안전모 착용 여부를 확인해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "제품 무게나 낙하 위험 등을 고려했을 때 안전화 미착용은 위험할 수 있음.",
+            "severity": "medium",
+            "recommendation": "적절한 안전화를 착용하도록 하고, 안전화 착용 의무를 교육해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "전선 작업 시 감전 및 날카로운 부품으로 인한 부상 위험이 있으므로 안전장갑 미착용은 위험함.",
+            "severity": "medium",
+            "recommendation": "전선 작업 및 날카로운 물체를 취급할 때는 반드시 절연 장갑 또는 적절한 안전장갑을 착용해야 함."
+          },
+          {
+            "category": "전기안전",
+            "item": "전선관리",
+            "rule": "산업안전보건기준에 관한 규칙",
+            "description": "전선이 노출되어 있고 정리되지 않아 감전 및 화재 위험이 있음.",
+            "severity": "high",
+            "recommendation": "전선을 정리하고 피복 손상 여부를 점검하며, 필요한 경우 절연 조치를 취해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "안전모, 안전화, 안전장갑 즉시 착용",
+          "노출된 전선 즉시 정리 및 절연 조치"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 실시",
+          "정기적인 안전 교육 실시",
+          "작업 환경 개선을 위한 지속적인 노력"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T20:35:16.819535"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:35:16.820100",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "feb6c8e8-301f-46ab-ac64-488eb56985e6",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "4bdd215a-7a56-4fcd-be60-1d5c8b074a57",
+        "filename": "4bdd215a-7a56-4fcd-be60-1d5c8b074a57.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/4bdd215a-7a56-4fcd-be60-1d5c8b074a57.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "workplace_type": "제조/조립 공장",
+        "workplace_description": "자동차 부품 조립 라인으로 보이며, 전선 및 전장 부품이 많이 보임. 작업자가 노트북을 사용하여 작업 중.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "물체가 떨어지거나 날아올 위험이 있는 작업장으로 판단되나 안전모를 착용하지 않음.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전모 착용 의무화"
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "무거운 물체를 다루거나 낙하 위험이 있는 작업 환경으로 판단되므로 안전화를 착용해야 함.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전화 착용 의무화"
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "전선 및 날카로운 부품을 다루는 작업이므로 안전 장갑 착용이 필요함.",
+            "severity": "medium",
+            "recommendation": "작업자에게 적절한 안전 장갑 착용 의무화"
+          }
+        ],
+        "immediate_actions": [
+          "안전모, 안전화, 안전장갑 즉시 지급 및 착용 교육 실시"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 및 작업 전 안전 교육 실시",
+          "작업장의 위험 요소를 평가하고 필요한 안전 조치 시행 (보호구 지급, 안전 교육 등)"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T20:45:59.411838"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:45:59.412399",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "7f061bc1-ccd9-428a-99e8-0196eb21b8de",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "d29b10f5-ff7d-4e01-8b9a-ba7ffa28e7c3",
+        "filename": "d29b10f5-ff7d-4e01-8b9a-ba7ffa28e7c3.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/d29b10f5-ff7d-4e01-8b9a-ba7ffa28e7c3.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:49:44.862845",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "02380057-2f2b-4023-953f-373f403ffd74",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "61f61553-ae32-4586-a3cd-87a23f0790e1",
+        "filename": "61f61553-ae32-4586-a3cd-87a23f0790e1.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/61f61553-ae32-4586-a3cd-87a23f0790e1.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:50:11.101800",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "fb003364-c0a3-40b5-942b-912d13ef7e38",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "a761cf76-69eb-498f-a7b4-50367d47814e",
+        "filename": "a761cf76-69eb-498f-a7b4-50367d47814e.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/a761cf76-69eb-498f-a7b4-50367d47814e.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:50:48.008553",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "ab3919b6-3ad2-4793-b37d-78e02267fd98",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "c923e9e8-7bc4-4329-a068-4ead574d5e76",
+        "filename": "c923e9e8-7bc4-4329-a068-4ead574d5e76.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/c923e9e8-7bc4-4329-a068-4ead574d5e76.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:51:10.784798",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "fa5c6e95-39d6-4b00-82a9-7df19a05e51c",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "acfce284-4d33-4c11-be12-b2bf11af6ded",
+        "filename": "acfce284-4d33-4c11-be12-b2bf11af6ded.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/acfce284-4d33-4c11-be12-b2bf11af6ded.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:51:15.888418",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "97338419-2223-442e-ba87-929142bd11f5",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "0ee90131-cef6-455a-b229-0e36a7fd0d86",
+        "filename": "0ee90131-cef6-455a-b229-0e36a7fd0d86.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/0ee90131-cef6-455a-b229-0e36a7fd0d86.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:51:38.221541",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "72dfc44f-53b3-4517-bfc5-a4a4bc352c98",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "9aa88b68-fdb0-44ae-b3c9-ced235a62b04",
+        "filename": "9aa88b68-fdb0-44ae-b3c9-ced235a62b04.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/9aa88b68-fdb0-44ae-b3c9-ced235a62b04.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전"
+      ]
+    },
+    "created_at": "2025-12-20T20:52:36.284714",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "2389c2a0-5fa4-40d1-baf5-018ef80430bf",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "714545aa-795f-4778-9782-54fb3e3ecf39",
+        "filename": "714545aa-795f-4778-9782-54fb3e3ecf39.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/714545aa-795f-4778-9782-54fb3e3ecf39.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T20:54:17.071745",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "404fa13d-1fac-480a-8019-dc1d6bee1a2c",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "54485c77-c0e6-4e95-9384-91b9ef0f1710",
+        "filename": "54485c77-c0e6-4e95-9384-91b9ef0f1710.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/54485c77-c0e6-4e95-9384-91b9ef0f1710.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T20:55:03.438991",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "bf75f077-dae3-4d58-847c-b5c7acd2fab6",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "09d540f2-2d6c-425d-b9b3-bd18dcce356b",
+        "filename": "09d540f2-2d6c-425d-b9b3-bd18dcce356b.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/09d540f2-2d6c-425d-b9b3-bd18dcce356b.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T20:55:10.445753",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "c7526514-a516-4d15-8b68-f7916e474802",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "a5439b06-e400-4d04-9eae-e841e1639e1d",
+        "filename": "a5439b06-e400-4d04-9eae-e841e1639e1d.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/a5439b06-e400-4d04-9eae-e841e1639e1d.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:01:32.686825",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "aa8a474e-66dc-43ae-94fd-c4e6d5134ad3",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "be87e522-f603-458a-9ce1-4e561afbfa80",
+        "filename": "be87e522-f603-458a-9ce1-4e561afbfa80.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/be87e522-f603-458a-9ce1-4e561afbfa80.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:02:01.845060",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "37c793d0-60dc-472a-ae3b-ae81bb38747c",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "500f0672-8142-4950-ad9a-bad729557f5c",
+        "filename": "500f0672-8142-4950-ad9a-bad729557f5c.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/500f0672-8142-4950-ad9a-bad729557f5c.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:12:54.496894",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "8de02968-e396-4b80-9da5-22647b6540d0",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "0c89b9b5-307d-42a6-8674-e24c028af4ff",
+        "filename": "0c89b9b5-307d-42a6-8674-e24c028af4ff.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/0c89b9b5-307d-42a6-8674-e24c028af4ff.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:13:03.545520",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "11cf3552-17cb-444d-971c-7043f0411dfd",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "09e46a71-f713-444c-b7c8-6e2fe131e20f",
+        "filename": "09e46a71-f713-444c-b7c8-6e2fe131e20f.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/09e46a71-f713-444c-b7c8-6e2fe131e20f.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:23:51.460605",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "e5c261d4-cbe3-4dd3-baa1-7716826c44cc",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "d13aae9c-b5a6-40dc-8686-7e6dcbebf33d",
+        "filename": "d13aae9c-b5a6-40dc-8686-7e6dcbebf33d.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/d13aae9c-b5a6-40dc-8686-7e6dcbebf33d.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:24:01.898094",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "62c100ee-0b84-4b5f-a4e2-a6089f04c839",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "fcdc3a2e-7de0-4ded-a8be-5ff45d51bda3",
+        "filename": "fcdc3a2e-7de0-4ded-a8be-5ff45d51bda3.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/fcdc3a2e-7de0-4ded-a8be-5ff45d51bda3.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:24:10.292638",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "95a86c6b-629a-4139-b463-8f49097e3456",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "4611a94f-bb4b-4bde-aa21-fb1738205e72",
+        "filename": "4611a94f-bb4b-4bde-aa21-fb1738205e72.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/4611a94f-bb4b-4bde-aa21-fb1738205e72.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:24:12.714413",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "1a4c4b3a-8e01-47cf-92c4-d1d47681f0ad",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "1dd2cc2f-07f9-4553-943f-bb924a663583",
+        "filename": "1dd2cc2f-07f9-4553-943f-bb924a663583.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/1dd2cc2f-07f9-4553-943f-bb924a663583.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:25:15.095251",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "5fc07bc2-d7f9-47f6-8be7-c145a973675f",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "8c6e4672-df28-4b1d-b608-b4073c0b9120",
+        "filename": "8c6e4672-df28-4b1d-b608-b4073c0b9120.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/8c6e4672-df28-4b1d-b608-b4073c0b9120.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:25:17.942323",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "06a69901-7129-4da9-ac59-668ce43e0c1b",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "fcf2cd4c-dafd-4d55-8d06-a152e748c23a",
+        "filename": "fcf2cd4c-dafd-4d55-8d06-a152e748c23a.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/fcf2cd4c-dafd-4d55-8d06-a152e748c23a.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:25:33.966079",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "7d6c0043-accb-493d-90d3-7bff811ac7dd",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "9771a211-55d3-49af-a6fe-7ab0be48e671",
+        "filename": "9771a211-55d3-49af-a6fe-7ab0be48e671.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/9771a211-55d3-49af-a6fe-7ab0be48e671.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:26:34.755000",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "e61b63e7-8f63-46df-8273-654389281a6c",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "3adc968a-21d6-4712-9e43-5d9ded648e65",
+        "filename": "3adc968a-21d6-4712-9e43-5d9ded648e65.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/3adc968a-21d6-4712-9e43-5d9ded648e65.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 401"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:29:06.259150",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "2e020be6-55cc-44a2-bc67-55875629df47",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "028531a5-fdf2-4662-a568-859a052ab794",
+        "filename": "028531a5-fdf2-4662-a568-859a052ab794.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/028531a5-fdf2-4662-a568-859a052ab794.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "workplace_type": "자동차 부품 조립/검사 작업장",
+        "workplace_description": "자동차 시트 또는 관련 부품을 조립하거나 검사하는 작업장으로 보이며, 전선 및 전자 부품이 많이 사용됨. 작업자는 노트북을 사용하여 작업 중.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "작업자가 안전모를 착용하지 않았음. 머리 위로 물체가 떨어질 위험이 있는 작업 환경에서 안전모 미착용은 위험함.",
+            "severity": "high",
+            "recommendation": "작업 중 안전모 착용 의무화 및 관리 감독 강화"
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "작업자가 안전화를 착용하지 않았음. 낙하물, 충격 위험으로부터 발을 보호하기 위해 안전화 착용 필요.",
+            "severity": "medium",
+            "recommendation": "작업 중 안전화 착용 의무화 및 관리 감독 강화"
+          },
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "산업안전보건기준에 관한 규칙 제32조",
+            "description": "전선 및 날카로운 부품을 다루는 작업이므로 안전장갑 착용 여부 확인 필요. 사진상으로는 미착용으로 보임.",
+            "severity": "medium",
+            "recommendation": "전선 및 날카로운 부품 취급 시 안전장갑 착용 의무화"
+          },
+          {
+            "category": "전기안전",
+            "item": "전선관리",
+            "rule": "산업안전보건기준에 관한 규칙",
+            "description": "작업대 주변에 전선이 노출되어 있어 감전 위험이 있음. 전선의 피복 손상 여부 확인 및 정리 필요.",
+            "severity": "medium",
+            "recommendation": "전선 정리 및 피복 손상 여부 점검, 필요한 경우 절연 조치 시행"
+          }
+        ],
+        "immediate_actions": [
+          "안전모 및 안전화 즉시 지급 및 착용 지시",
+          "전선 노출 부위 정리 및 절연 조치 확인"
+        ],
+        "recommendations": [
+          "작업 전 TBM(Tool Box Meeting)을 통해 위험 요인 및 안전 수칙 교육 실시",
+          "정기적인 안전 점검을 통해 위험 요인 제거",
+          "보호구 착용 상태 점검 및 관리 강화"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:29:27.253478",
+        "regulations_source": "default"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:29:27.254288",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "da5041a3-dce9-45f8-a16d-a1da49204948",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "b5db7d4e-9a99-4843-8487-50133ff11417",
+        "filename": "b5db7d4e-9a99-4843-8487-50133ff11417.jpg",
+        "original_filename": "test_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/b5db7d4e-9a99-4843-8487-50133ff11417.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "workplace_type": "자동차 부품 조립 공장",
+        "workplace_description": "자동차 시트 조립 라인으로 보이며, 전기 배선 작업이 이루어지고 있음. 작업대는 깔끔하게 정리되어 있음.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "[산업안전보건법]: 머리 부상 위험이 있는 작업장에서 작업자는 반드시 안전모를 착용해야 함.",
+            "description": "작업자가 안전모를 착용하지 않았음. 머리 부상 위험이 존재할 수 있음.",
+            "severity": "high",
+            "recommendation": "작업자에게 안전모를 착용하도록 즉시 조치하고, 작업장 내 안전모 착용 규정을 준수하도록 교육해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]: 발 부상 위험이 있는 작업장에서 작업자는 반드시 안전화를 착용해야 함.",
+            "description": "작업자가 안전화를 착용하지 않았음. 발 부상 위험이 존재할 수 있음.",
+            "severity": "medium",
+            "recommendation": "작업자에게 안전화를 착용하도록 즉시 조치하고, 작업장 내 안전화 착용 규정을 준수하도록 교육해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "작업자에게 안전모 착용 지시",
+          "작업자에게 안전화 착용 지시"
+        ],
+        "recommendations": [
+          "작업 시작 전 안전 점검을 실시하고, 보호구 착용 여부를 확인해야 함.",
+          "작업자에게 안전 교육을 정기적으로 실시하여 안전 의식을 고취해야 함."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:30:50.945474",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:30:50.945987",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "6cf8b956-e5be-474b-b603-3be72211d2ed",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "da2544e1-086f-4cb3-983f-43908161d6ff",
+        "filename": "da2544e1-086f-4cb3-983f-43908161d6ff.jpg",
+        "original_filename": "safe_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/da2544e1-086f-4cb3-983f-43908161d6ff.jpg",
+        "size": 116977
+      },
+      "analysis": {
+        "workplace_type": "자동차 부품 제조 공장",
+        "workplace_description": "자동차 시트 관련 부품을 조립하거나 검사하는 작업대로 보임. 전선, 부품, 공구 등이 작업대 주변에 놓여 있음. 작업자는 노트북을 사용하여 작업 중.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "[산업안전보건법]: 머리 부상 위험이 있는 작업장에서 작업자는 반드시 안전모를 착용해야 함.",
+            "description": "작업자가 안전모를 착용하지 않았음. 부품 낙하 등에 의한 머리 부상 위험이 존재할 수 있음.",
+            "severity": "medium",
+            "recommendation": "작업자는 반드시 안전모를 착용해야 함. 작업 환경에 적합한 안전모를 지급하고 착용 교육을 실시해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]: 발 부상 위험이 있는 작업장에서 작업자는 반드시 안전화를 착용해야 함.",
+            "description": "작업자가 안전화를 착용하지 않았음. 부품 낙하 또는 날카로운 물체에 의한 발 부상 위험이 존재할 수 있음.",
+            "severity": "medium",
+            "recommendation": "작업자는 반드시 안전화를 착용해야 함. 발을 보호할 수 있는 안전화를 지급하고 착용 교육을 실시해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "rule": "[산업안전보건법]: 눈 부상 위험이 있는 작업장에서 작업자는 반드시 보안경을 착용해야 함.",
+            "description": "정밀 작업이거나 부품 조립 시 파편, 먼지 등에 의한 눈 부상 위험이 있을 수 있으나, 보안경 착용 여부 확인 불가.",
+            "severity": "low",
+            "recommendation": "작업 분석을 통해 눈 부상 위험이 존재한다면 보안경을 착용해야 함. 보안경은 날아오는 파편, 화학 물질, 유해 광선으로부터 눈을 보호할 수 있어야 함."
+          },
+          {
+            "category": "통로",
+            "item": "통행로 확보",
+            "rule": "[산업안전보건법]: 작업장 내 통로는 항상 안전하고 접근 가능해야 하며, 장애물이 없어야 함.",
+            "description": "전선, 부품 등으로 인해 통행로가 좁거나 막혀 있을 가능성이 있음.",
+            "severity": "medium",
+            "recommendation": "작업장 내 통로는 항상 안전하고 접근 가능하도록 유지해야 함. 불필요한 물건은 정리정돈하고, 필요한 경우 통로 폭을 확보해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "작업자에게 안전모 및 안전화 즉시 지급 및 착용 지시",
+          "작업장 주변 정리정돈 및 통행로 확보"
+        ],
+        "recommendations": [
+          "작업 환경에 대한 위험성 평가 실시",
+          "개인 보호구 지급 및 착용 교육 실시",
+          "정리정돈 및 청소 상태 유지",
+          "작업 전 안전 점검 실시",
+          "전기 설비 안전 점검 실시 (누전 차단기, 접지, 절연 상태 등)"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:33:35.134878",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:33:35.135176",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "b031bf0b-5a26-440f-bd89-c1b8c0b5bd96",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "f2cd8b2f-2456-4514-8880-7aef89d5ca93",
+        "filename": "f2cd8b2f-2456-4514-8880-7aef89d5ca93.jpg",
+        "original_filename": "safe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/f2cd8b2f-2456-4514-8880-7aef89d5ca93.jpg",
+        "size": 160843
+      },
+      "analysis": {
+        "workplace_type": "건설 현장",
+        "workplace_description": "철근 콘크리트 구조물 건설 작업 현장으로 보이며, 철근 가공 및 용접 작업이 진행 중임.",
+        "overall_risk_level": "high",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "rule": "[산업안전보건법]: 눈 부상 위험이 있는 작업장에서 작업자는 반드시 보안경을 착용해야 함. 보안경은 날아오는 파편, 화학 물질, 유해 광선으로부터 눈을 보호해야 함.",
+            "description": "철근 가공 작업 중 눈 보호를 위한 보안경 착용이 필요하나 미착용한 작업자가 보임. 용접 작업자도 보안경 착용 상태가 양호한지 확인 필요.",
+            "severity": "high",
+            "recommendation": "모든 작업자가 보안경을 착용하도록 지도하고, 보안경의 상태를 점검하여 필요한 경우 교체해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "방진마스크/방독마스크",
+            "rule": "[산업안전보건법]: 분진, 유해 가스 등 호흡기 유해 물질이 발생하는 작업장에서 작업자는 반드시 적절한 방진마스크 또는 방독마스크를 착용해야 함. 마스크는 작업 환경에 존재하는 유해 물질의 종류와 농도에 적합해야 함.",
+            "description": "용접 작업으로 인해 유해 가스 발생이 예상되므로, 작업자는 적절한 방독마스크를 착용해야 함. 사진상 작업자의 마스크 착용 여부 불확실 (착용했더라도 적절한 방독 마스크가 아닐 수 있음).",
+            "severity": "medium",
+            "recommendation": "용접 작업 시 발생하는 유해 가스에 적합한 방독마스크를 지급하고 착용하도록 교육해야 함."
+          },
+          {
+            "category": "통로",
+            "item": "통행로 확보",
+            "rule": "[산업안전보건법]: 작업장 내 통로는 항상 안전하고 접근 가능해야 하며, 장애물이 없어야 함. 통로의 폭은 작업 내용과 통행량에 적합해야 함.",
+            "description": "작업장 바닥에 철근 등 자재가 흩어져 있어 통행에 불편을 초래하고 안전사고의 위험이 있음.",
+            "severity": "medium",
+            "recommendation": "작업장 내 자재를 정리정돈하고, 통행로를 확보하여 작업자들이 안전하게 이동할 수 있도록 해야 함."
+          },
+          {
+            "category": "기계안전",
+            "item": "안전 가드",
+            "rule": "[산업안전보건법]: 회전하는 기계 부품 또는 위험한 작업 영역으로부터 작업자를 보호하기 위해 안전 가드를 설치해야 함. 안전 가드는 작업 중 제거되지 않도록 견고하게 고정되어야 함.",
+            "description": "절단기에 안전 가드가 설치되어 있는지 확인이 필요하며, 미설치 시 즉시 설치해야 함.",
+            "severity": "high",
+            "recommendation": "절단기에 안전 가드를 설치하고, 작업 전 정상 작동 여부를 확인해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "보안경 미착용 작업자에게 즉시 보안경 지급 및 착용 지도",
+          "용접 작업 시 방독마스크 착용 확인 및 지급",
+          "통행로 확보를 위한 자재 정리 정돈 실시",
+          "절단기 안전 가드 설치 및 점검"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 실시 및 기록 유지",
+          "정기적인 안전 교육 실시",
+          "작업 환경 개선을 위한 지속적인 노력"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:34:15.167336",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:34:15.167785",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "c5942139-66b9-40ed-a541-c830cb94d9a5",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "db37abb5-b259-4263-bb68-5d071ef8bd0e",
+        "filename": "db37abb5-b259-4263-bb68-5d071ef8bd0e.jpg",
+        "original_filename": "compliant_factory.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/db37abb5-b259-4263-bb68-5d071ef8bd0e.jpg",
+        "size": 29
+      },
+      "analysis": {
+        "success": false,
+        "error": "API 오류: 400"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:34:35.283064",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "b5eebfae-73c5-4a9a-95f7-ec7b2f819fa6",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "4d764b0d-7f02-4ca9-b960-4f9ef95b6010",
+        "filename": "4d764b0d-7f02-4ca9-b960-4f9ef95b6010.jpg",
+        "original_filename": "lab_safety.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/4d764b0d-7f02-4ca9-b960-4f9ef95b6010.jpg",
+        "size": 166031
+      },
+      "analysis": {
+        "workplace_type": "실험실",
+        "workplace_description": "현미경을 사용하여 실험을 진행 중인 실험실 환경",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]",
+            "description": "실험실 작업 환경에서 안전화를 착용하지 않고 일반 부츠를 착용하고 있어 발 부상 위험에 노출될 수 있음.",
+            "severity": "medium",
+            "recommendation": "실험실 내에서는 반드시 안전화를 착용하도록 규정하고, 작업자에게 안전화를 지급 및 착용 교육을 실시해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "rule": "[산업안전보건법]",
+            "description": "현미경 사용 시 눈에 대한 잠재적 위험(예: 화학 물질 튐)으로부터 보호하기 위해 보안경을 착용하지 않음.",
+            "severity": "low",
+            "recommendation": "화학 물질을 다루거나 눈에 위험이 될 수 있는 작업을 수행할 때는 반드시 보안경을 착용하도록 해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "안전화 즉시 착용",
+          "보안경 착용 여부 확인 및 필요 시 착용"
+        ],
+        "recommendations": [
+          "실험실 안전 규정 준수 여부 정기 점검",
+          "실험실 작업자 대상 안전 교육 실시"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:34:49.247567",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:34:49.247771",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "18a8a589-4fd3-441a-b1ae-d3987f716578",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "78dba28d-0c50-42f1-be8e-1311b62a84f3",
+        "filename": "78dba28d-0c50-42f1-be8e-1311b62a84f3.jpg",
+        "original_filename": "cleanroom.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/78dba28d-0c50-42f1-be8e-1311b62a84f3.jpg",
+        "size": 145108
+      },
+      "analysis": {
+        "workplace_type": "제약/생산 시설 (추정)",
+        "workplace_description": "알약 및 캡슐 포장재가 흩어져 있는 환경. 정확한 작업 공정은 불분명.",
+        "overall_risk_level": "low",
+        "pass_status": true,
+        "compliant_items": [],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:35:02.288020",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:35:02.288417",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "cb4231f9-16be-4182-a46e-102829f143dd",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "5350878a-058e-4af9-a059-cc5ac8fac927",
+        "filename": "5350878a-058e-4af9-a059-cc5ac8fac927.jpg",
+        "original_filename": "cleanroom.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/5350878a-058e-4af9-a059-cc5ac8fac927.jpg",
+        "size": 145108
+      },
+      "analysis": {
+        "workplace_type": "제약/의약품 관련 작업장 (가정 또는 병원 환경 추정)",
+        "workplace_description": "알약 및 캡슐 포장재(블리스터 포장)가 혼합되어 있는 이미지. 일부는 내용물이 비어있거나 남아있음. 가정 또는 병원 환경에서 의약품 관리 관련 작업장으로 추정.",
+        "overall_risk_level": "low",
+        "pass_status": true,
+        "compliant_items": [],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "사용 후 빈 블리스터 포장재는 적절한 절차에 따라 폐기하십시오.",
+          "알약 및 캡슐을 취급할 때 위생 장갑 착용을 고려하십시오 (해당되는 경우).",
+          "의약품의 보관 및 폐기는 관련 규정을 준수하십시오."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:35:39.008336",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:35:39.008950",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "dbeccde7-899b-4d74-99c5-c707647f1265",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "4c47db8d-1f5b-4cea-897d-7dced22c0d58",
+        "filename": "4c47db8d-1f5b-4cea-897d-7dced22c0d58.jpg",
+        "original_filename": "cleanroom.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/4c47db8d-1f5b-4cea-897d-7dced22c0d58.jpg",
+        "size": 145108
+      },
+      "analysis": {
+        "workplace_type": "제약/의약품 관련 작업장",
+        "workplace_description": "알약 및 캡슐 포장재가 흩어져 있는 이미지. 의약품 제조 또는 포장과 관련된 환경으로 추정됨.",
+        "overall_risk_level": "low",
+        "pass_status": false,
+        "compliant_items": [],
+        "violations": [
+          {
+            "category": "보호구/방진마스크/방독마스크",
+            "item": "방진마스크/방독마스크 미착용",
+            "rule": "[산업안전보건법]",
+            "description": "의약품 제조 공정에서 분진 발생 가능성이 있으나, 방진마스크 또는 방독마스크 착용 여부 확인 불가.",
+            "severity": "medium",
+            "recommendation": "작업 환경 내 분진 발생 가능성을 평가하고, 필요 시 적절한 방진마스크 또는 방독마스크를 착용하도록 관리."
+          },
+          {
+            "category": "통로/통행로 확보",
+            "item": "통행로 확보 미흡",
+            "rule": "[산업안전보건법]",
+            "description": "알약 및 포장재가 바닥에 어수선하게 흩어져 있어 통행에 불편을 초래할 수 있음. 작업 공간이 정리정돈되어 있지 않음.",
+            "severity": "low",
+            "recommendation": "작업 공간을 정리하고, 통행로를 확보하여 작업자의 안전한 이동을 보장해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "작업 공간 정리정돈 및 통행로 확보"
+        ],
+        "recommendations": [
+          "작업 환경 내 유해 물질 발생 가능성을 평가하고, 필요 시 적절한 보호구를 착용하도록 관리",
+          "정기적인 작업장 안전 점검 실시",
+          "작업자 대상 안전 교육 실시"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:37:35.623617",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:37:35.624128",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "9a4958e8-fadd-4ec5-93a4-781dadae8301",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "3da21145-ea6d-4795-ad3f-640f174d989b",
+        "filename": "3da21145-ea6d-4795-ad3f-640f174d989b.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/3da21145-ea6d-4795-ad3f-640f174d989b.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "용접 작업장",
+        "workplace_description": "용접 작업을 수행 중인 작업자의 모습. 스파크가 튀고 있음.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "용접 작업으로 인한 불꽃, 자외선으로부터 눈과 얼굴을 보호하기 위한 용접면을 착용하고 있음."
+          }
+        ],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "[산업안전보건법]: 머리 부상 위험이 있는 작업장에서 작업자는 반드시 안전모를 착용해야 함.",
+            "description": "용접 작업 시 머리 부상 위험이 있으나 안전모를 착용하지 않음.",
+            "severity": "medium",
+            "recommendation": "용접 작업 시 안전모 착용을 의무화하고, 작업 전 안전모 착용 여부를 확인해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]: 발 부상 위험이 있는 작업장에서 작업자는 반드시 안전화를 착용해야 함.",
+            "description": "용접 작업 시 발 부상 위험이 있으나 안전화를 착용했는지 확인 불가.",
+            "severity": "medium",
+            "recommendation": "용접 작업 시 안전화 착용을 의무화하고, 작업 전 안전화 착용 여부를 확인해야 함."
+          },
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "rule": "[산업안전보건법]: 눈 부상 위험이 있는 작업장에서 작업자는 반드시 보안경을 착용해야 함.",
+            "description": "용접면을 착용하고 있지만, 용접면 아래 보안경 착용 여부 확인 불가",
+            "severity": "low",
+            "recommendation": "용접면 외에 추가적으로 보안경을 착용하여 눈을 보호하는 것이 바람직함."
+          },
+          {
+            "category": "보호구",
+            "item": "방진마스크/방독마스크",
+            "rule": " [산업안전보건법]: 분진, 유해 가스 등 호흡기 유해 물질이 발생하는 작업장에서 작업자는 반드시 적절한 방진마스크 또는 방독마스크를 착용해야 함.",
+            "description": "용접 작업 시 발생하는 분진 및 유해가스로부터 호흡기를 보호하기 위한 적절한 마스크 착용 여부 확인 불가",
+            "severity": "medium",
+            "recommendation": "용접 작업 시 발생하는 유해 물질에 적합한 방진마스크 또는 방독마스크를 착용해야 함. 작업 환경에 존재하는 유해 물질의 종류와 농도에 적합한 마스크를 선택하여 착용해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "용접 작업 시 안전모 착용",
+          "용접 작업 시 안전화 착용",
+          "용접 작업 시 적절한 호흡기 보호구 착용"
+        ],
+        "recommendations": [
+          "작업 전 작업 환경의 위험 요소를 파악하고, 적절한 보호구를 지급 및 착용하도록 교육해야 함.",
+          "작업장의 안전 점검을 주기적으로 실시하고, 미비점을 개선해야 함."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:39:22.238488",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:39:22.238679",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "1a180729-588d-4d68-aa8a-6b2056971872",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "e888abe4-ffce-40c0-b984-a4f5afdaea10",
+        "filename": "e888abe4-ffce-40c0-b984-a4f5afdaea10.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/e888abe4-ffce-40c0-b984-a4f5afdaea10.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "용접 작업장",
+        "workplace_description": "용접 작업을 수행 중인 환경",
+        "overall_risk_level": "high",
+        "pass_status": false,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "보안면",
+            "description": "용접 작업으로 인한 불꽃, 파편으로부터 눈과 얼굴을 보호하기 위해 보안면을 착용하고 있음"
+          }
+        ],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]",
+            "description": "발 부상 위험이 있는 작업장에서 작업자는 반드시 안전화를 착용해야 함. 이미지에서 작업자가 안전화를 착용하고 있는지 확인 불가.",
+            "severity": "medium",
+            "recommendation": "작업 시 안전화 착용 필요"
+          },
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "[산업안전보건법]",
+            "description": "머리 부상 위험이 있는 작업장에서 작업자는 반드시 안전모를 착용해야 함. 용접 작업 시에도 머리 부상 위험이 있으므로 안전모 착용 필요. 이미지에서 안전모 착용 여부 확인 불가.",
+            "severity": "medium",
+            "recommendation": "작업 시 안전모 착용 필요"
+          },
+          {
+            "category": "보호구",
+            "item": "방진마스크/방독마스크",
+            "rule": "[산업안전보건법]",
+            "description": "용접 시 발생하는 분진, 유해가스 흡입 위험이 있으므로 적절한 방진마스크 또는 방독마스크 착용이 필요. 이미지에서 마스크 착용 여부 확인 불가.",
+            "severity": "medium",
+            "recommendation": "용접 작업 시 방진마스크 또는 방독마스크 착용 필요. 작업 환경에 적합한 마스크 종류를 선택해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "안전화 착용",
+          "안전모 착용",
+          "방진마스크 또는 방독마스크 착용 여부 확인 및 착용"
+        ],
+        "recommendations": [
+          "작업 전 안전 점검 실시",
+          "작업자 안전 교육 실시",
+          "작업 환경 유해 물질 농도 측정 및 환기 설비 점검"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:40:26.289073",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:40:26.289567",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "a474ec81-41a1-4488-89b9-54c6f8580a63",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "8ee121fb-bc26-48ca-b667-ff7f0394d281",
+        "filename": "8ee121fb-bc26-48ca-b667-ff7f0394d281.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/8ee121fb-bc26-48ca-b667-ff7f0394d281.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "제조업",
+        "workplace_description": "용접 작업 중인 작업 현장",
+        "overall_risk_level": "high",
+        "pass_status": false,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "얼굴, 눈 보호를 위한 용접면 착용"
+          },
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "description": "용접면이 머리 보호 기능 포함"
+          }
+        ],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "[산업안전보건법]",
+            "description": "용접 작업 시 안전장갑 착용 필요. 손에 안전장갑 미착용 확인됨",
+            "severity": "high",
+            "recommendation": "용접 작업용 안전장갑을 착용하여 화상 및 기타 위험으로부터 보호해야 함"
+          },
+          {
+            "category": "보호구",
+            "item": "안전화",
+            "rule": "[산업안전보건법]",
+            "description": "발 부상 위험이 있는 작업장에서 안전화 착용 필요하나, 발이 보이지 않아 확인 불가",
+            "severity": "medium",
+            "recommendation": "작업 시 안전화 착용 여부 확인 필요"
+          }
+        ],
+        "immediate_actions": [
+          "용접 작업 시 즉시 안전장갑 착용"
+        ],
+        "recommendations": [
+          "작업 전 작업 환경에 적합한 보호구 착용 여부를 점검하는 절차 마련",
+          "작업장 내 정리정돈 상태를 개선하여 작업 공간 확보"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:43:15.023865",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:43:15.024124",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "2bf4381b-b8b2-4b27-bb6d-3e4f9b3241d5",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "b2feded4-20f1-491b-8224-9fb3b91f3b75",
+        "filename": "b2feded4-20f1-491b-8224-9fb3b91f3b75.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/b2feded4-20f1-491b-8224-9fb3b91f3b75.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "제조업",
+        "workplace_description": "용접 작업 중인 작업장",
+        "overall_risk_level": "high",
+        "pass_status": false,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "용접 작업으로 인한 스파크 및 유해 광선으로부터 눈과 얼굴을 보호"
+          }
+        ],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전장갑",
+            "rule": "[산업안전보건법]",
+            "description": "용접 작업 시 발생할 수 있는 화상 및 날카로운 물체로부터 손을 보호하기 위한 안전장갑 미착용",
+            "severity": "high",
+            "recommendation": "용접 작업 시 내열성 및 내절단성을 갖춘 안전장갑을 착용해야 함."
+          }
+        ],
+        "immediate_actions": [
+          "용접 작업 즉시 중단 및 안전장갑 착용 후 재개"
+        ],
+        "recommendations": [
+          "작업 전 TBM (Tool Box Meeting)을 통해 안전 사항 재확인",
+          "작업장에 MSDS (물질안전보건자료) 비치 및 교육 실시",
+          "용접 작업 주변 정리 정돈 상태 점검 및 개선"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:45:26.028831",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:45:26.029151",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "3aecf402-183a-4dcf-851c-0b6c9123f485",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "93e524bb-6e6e-4b51-b8c0-c5f7625d7cef",
+        "filename": "93e524bb-6e6e-4b51-b8c0-c5f7625d7cef.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/93e524bb-6e6e-4b51-b8c0-c5f7625d7cef.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "제조업/용접 작업장",
+        "workplace_description": "용접 작업 중인 환경",
+        "overall_risk_level": "medium",
+        "pass_status": true,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "용접 작업으로 인한 불꽃 및 유해 광선으로부터 얼굴과 눈을 보호"
+          },
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "description": "용접면이 머리 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "description": "용접면이 눈 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "안면보호구",
+            "description": "용접면이 안면 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "방진/방독마스크",
+            "description": "용접면 내부에 호흡 보호 기능이 있다고 가정 (확인 필요)"
+          },
+          {
+            "category": "작업복",
+            "item": "긴팔 상의",
+            "description": "용접 작업 시 불꽃으로부터 피부 보호"
+          }
+        ],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "작업복/방염복 착용을 권장합니다.",
+          "안전화 착용 여부 확인이 필요합니다.",
+          "용접 작업 시 발생하는 유해 물질에 대한 적절한 환기 시스템을 구축하는 것을 권장합니다."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:47:36.972735",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:47:36.972906",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "a617ad99-37ed-4f06-9463-d063b65a17bb",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "51600486-e0ae-4030-bbf9-876b26990235",
+        "filename": "51600486-e0ae-4030-bbf9-876b26990235.jpg",
+        "original_filename": "e888abe4-ffce-40c0-b984-a4f5afdaea10.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/51600486-e0ae-4030-bbf9-876b26990235.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "제조업/금속 가공업",
+        "workplace_description": "용접 작업 중인 작업 현장",
+        "overall_risk_level": "medium",
+        "pass_status": true,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "용접 작업으로 인한 불꽃, 파편 및 유해 광선으로부터 머리, 눈, 얼굴 보호"
+          }
+        ],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "용접 작업 시 발생하는 유해 가스 및 분진으로부터 호흡기를 보호하기 위해 용접면에 연결된 호흡 보호 장비 착용을 권장합니다.",
+          "작업복은 불연성 소재의 방염복을 착용하여 화재 위험을 예방하는 것이 좋습니다.",
+          "장갑 착용 여부를 확인하고, 필요한 경우 내열 장갑 착용을 권장합니다."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:49:47.132478",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:49:47.133224",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "63c6621e-c98d-43d2-89bb-73952d156553",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "8c19e591-e482-4fff-8710-5df7f3e3e154",
+        "filename": "8c19e591-e482-4fff-8710-5df7f3e3e154.jpg",
+        "original_filename": "e888abe4-ffce-40c0-b984-a4f5afdaea10.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/8c19e591-e482-4fff-8710-5df7f3e3e154.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "용접 작업장",
+        "workplace_description": "용접 작업 중인 환경",
+        "overall_risk_level": "high",
+        "pass_status": true,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "안면보호구/용접면",
+            "description": "용접 작업 중 용접면 착용으로 머리, 눈, 얼굴 보호 (안전모, 보안경 대체)"
+          },
+          {
+            "category": "보호구",
+            "item": "방진/방독마스크",
+            "description": "용접면 내부 호흡 보호 기능 (방진/방독 마스크 대체)"
+          }
+        ],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "용접 작업 시 발생할 수 있는 유해 물질에 대한 환기 시스템 점검 및 개선을 권고합니다.",
+          "작업자의 안전을 위해 방염복 착용을 권고합니다.",
+          "작업 환경 주변 정리정돈을 권고합니다."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:50:13.120052",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:50:13.120397",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "4bd232f4-8159-41fa-80fb-621374b838ed",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "95e2c36f-ba19-4a64-a2ce-8014a3d48208",
+        "filename": "95e2c36f-ba19-4a64-a2ce-8014a3d48208.jpg",
+        "original_filename": "ppe_worker.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/95e2c36f-ba19-4a64-a2ce-8014a3d48208.jpg",
+        "size": 92172
+      },
+      "analysis": {
+        "workplace_type": "제조업/금속 가공업",
+        "workplace_description": "용접 작업 중인 환경",
+        "overall_risk_level": "high",
+        "pass_status": true,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "용접면",
+            "description": "용접 작업으로 인한 불꽃, 파편, 유해 광선으로부터 얼굴과 눈을 보호"
+          },
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "description": "용접면이 머리 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "보안경",
+            "description": "용접면이 눈 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "안면보호구",
+            "description": "용접면이 안면 보호 기능 수행"
+          },
+          {
+            "category": "보호구",
+            "item": "방진/방독마스크",
+            "description": "용접면에 호흡보호 기능이 있을 가능성"
+          }
+        ],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "작업 환경에 적합한 보호구를 착용하고 있는지 확인",
+          "용접 작업 시 발생하는 유해 가스에 대한 환기 시설 점검",
+          "작업장의 정리 정돈 상태를 개선하여 안전한 작업 공간 확보"
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T21:50:20.357076",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T21:50:20.357315",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "f1fccfb6-9943-4ed2-949b-fd39bd916e12",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "05a089fa-6cfd-46c4-9dcd-ab2293e47d90",
+        "filename": "05a089fa-6cfd-46c4-9dcd-ab2293e47d90.HEIC",
+        "original_filename": "IMG_8270.HEIC",
+        "path": "/Users/ichaeeun/hackathon/uploads/05a089fa-6cfd-46c4-9dcd-ab2293e47d90.HEIC",
+        "size": 2642510
+      },
+      "analysis": {
+        "workplace_type": "불명",
+        "workplace_description": "천장 모습이 보이는 실내 작업장으로 보이며, 조명이 설치되어 있음.",
+        "overall_risk_level": "low",
+        "pass_status": true,
+        "compliant_items": [
+          {
+            "category": "통로",
+            "item": "조명",
+            "description": "천장에 조명이 설치되어 있어 통로 조명 기준을 충족하는 것으로 보임"
+          }
+        ],
+        "violations": [],
+        "immediate_actions": [],
+        "recommendations": [
+          "작업장 유형을 특정하기 어렵고, 보이는 정보가 제한적이므로, 추가적인 정보가 필요합니다.",
+          "작업 내용에 따른 적절한 보호구 착용이 필요합니다."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T22:32:56.558123",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T22:32:56.559240",
+    "type": "safety_analysis"
+  },
+  {
+    "id": "b347b219-9140-458d-bcf8-8bae9289b919",
+    "user_id": "default",
+    "content": {
+      "file_info": {
+        "success": true,
+        "file_id": "642c1237-ba9d-4bd9-8a13-eb14577772fd",
+        "filename": "642c1237-ba9d-4bd9-8a13-eb14577772fd.jpg",
+        "original_filename": "01.37021696.1.jpg",
+        "path": "/Users/ichaeeun/hackathon/uploads/642c1237-ba9d-4bd9-8a13-eb14577772fd.jpg",
+        "size": 141210
+      },
+      "analysis": {
+        "workplace_type": "섬유 가공 공장",
+        "workplace_description": "섬유를 가공하는 공장 내부이며, 작업자는 설비를 점검하고 있다.",
+        "overall_risk_level": "medium",
+        "pass_status": false,
+        "compliant_items": [
+          {
+            "category": "보호구",
+            "item": "작업모",
+            "description": "작업자가 작업모를 착용하고 있다."
+          },
+          {
+            "category": "보호구",
+            "item": "보호장갑",
+            "description": "작업자가 보호장갑을 착용하고 있다."
+          },
+          {
+            "category": "통로",
+            "item": "통행로 확보",
+            "description": "작업 통로가 확보되어 있다."
+          }
+        ],
+        "violations": [
+          {
+            "category": "보호구",
+            "item": "안전모",
+            "rule": "[산업안전보건법]: 머리 부상 위험이 있는 작업장에서 작업자는 반드시 안전모를 착용해야 함.",
+            "description": "머리 부상 위험이 있는 작업 환경임에도 작업자가 안전모를 착용하지 않고 작업모만 착용하고 있다.",
+            "severity": "high",
+            "recommendation": "안전모를 착용하도록 한다."
+          }
+        ],
+        "immediate_actions": [
+          "작업자는 즉시 안전모를 착용해야 함."
+        ],
+        "recommendations": [
+          "작업 시 안전화를 착용하는 것을 권장합니다."
+        ],
+        "success": true,
+        "analyzed_at": "2025-12-20T22:33:02.894152",
+        "regulations_source": "web_scraper + llm"
+      },
+      "regulations_applied": [
+        "보호구",
+        "통로",
+        "소화설비",
+        "전기안전",
+        "기계안전",
+        "_metadata"
+      ]
+    },
+    "created_at": "2025-12-20T22:33:02.894525",
+    "type": "safety_analysis"
+  }
+]

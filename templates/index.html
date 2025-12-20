@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공장 안전 규정 분석 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+
+        .tech-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #00d4ff;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(0,212,255,0.5);
+            border-radius: 15px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0,212,255,0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #00d4ff;
+            background: rgba(0,212,255,0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #7b2cbf;
+            background: rgba(123,44,191,0.2);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .upload-area p {
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .upload-area .highlight {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-container.active {
+            display: block;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            display: none;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .status-pass {
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .status-fail {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .risk-level {
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .risk-high { background: #ff4444; color: #fff; }
+        .risk-medium { background: #ffaa00; color: #000; }
+        .risk-low { background: #00ff88; color: #000; }
+
+        .section-title {
+            color: #00d4ff;
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .item-list {
+            list-style: none;
+        }
+
+        .item-list li {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .item-list li.violation {
+            border-left-color: #ff4444;
+        }
+
+        .item-list li.compliant {
+            border-left-color: #00ff88;
+        }
+
+        .item-category {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        .item-rule {
+            color: #00d4ff;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        .item-recommendation {
+            background: rgba(0,212,255,0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-left: 10px;
+        }
+
+        .severity-high { background: #ff4444; }
+        .severity-medium { background: #ffaa00; color: #000; }
+        .severity-low { background: #00ff88; color: #000; }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0,212,255,0.2);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .regulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .regulation-card {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .regulation-card h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .regulation-card ul {
+            list-style: none;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .regulation-card li {
+            padding: 3px 0;
+        }
+
+        .workplace-info {
+            background: rgba(0,212,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .workplace-info h3 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .summary-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .summary-label {
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .summary-pass { color: #00ff88; }
+        .summary-fail { color: #ff4444; }
+        .summary-total { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>공장 안전 규정 분석 시스템</h1>
+            <p>AI 기반 한국 산업안전보건 규정 준수 여부 자동 검사</p>
+            <div class="tech-badges">
+                <span class="badge">SpoonOS</span>
+                <span class="badge">Spoon-toolkit Memory</span>
+                <span class="badge">Spoon-toolkit Storage</span>
+                <span class="badge">Gemini Vision AI</span>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- 왼쪽: 업로드 및 분석 -->
+            <div class="left-section">
+                <div class="card">
+                    <h2>📸 이미지 업로드</h2>
+
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-icon">📁</div>
+                        <p>공장 또는 작업장 이미지를 <span class="highlight">드래그 앤 드롭</span>하거나</p>
+                        <p><span class="highlight">클릭</span>하여 파일을 선택하세요</p>
+                        <p style="margin-top: 15px; font-size: 0.85em;">지원 형식: JPG, PNG, WEBP</p>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*">
+
+                    <div class="preview-container" id="preview-container">
+                        <img id="preview-image" class="preview-image" src="" alt="미리보기">
+                        <p id="file-name" style="color: #888; margin-bottom: 15px;"></p>
+                        <button class="btn" id="analyze-btn" onclick="analyzeImage()">
+                            🔍 안전 규정 분석 시작
+                        </button>
+                    </div>
+
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>AI가 이미지를 분석하고 있습니다...</p>
+                        <p style="color: #888; margin-top: 10px;">한국 산업안전보건 기준에 따라 검사 중</p>
+                    </div>
+                </div>
+
+                <!-- 적용 규정 -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2>📋 적용 안전 규정</h2>
+                    <div class="regulation-grid" id="regulations-grid">
+                        <!-- 동적으로 로드 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽: 분석 결과 -->
+            <div class="right-section">
+                <div class="card">
+                    <h2>📊 분석 결과</h2>
+
+                    <div id="result-placeholder" style="text-align: center; padding: 60px 0; color: #888;">
+                        <div style="font-size: 4em; margin-bottom: 20px;">🔬</div>
+                        <p>이미지를 업로드하면 AI가 안전 규정 준수 여부를 분석합니다.</p>
+                    </div>
+
+                    <div class="result-section" id="result-section">
+                        <!-- 통과/불합격 상태 -->
+                        <div id="status-container" style="text-align: center;"></div>
+
+                        <!-- 요약 -->
+                        <div class="summary-grid" id="summary-grid"></div>
+
+                        <!-- 작업장 정보 -->
+                        <div class="workplace-info" id="workplace-info"></div>
+
+                        <!-- 준수 사항 -->
+                        <h3 class="section-title">✅ 규정 준수 사항</h3>
+                        <ul class="item-list" id="compliant-list"></ul>
+
+                        <!-- 위반 사항 -->
+                        <h3 class="section-title">⚠️ 규정 위반 / 개선 필요</h3>
+                        <ul class="item-list" id="violation-list"></ul>
+
+                        <!-- 즉시 조치 -->
+                        <h3 class="section-title">🚨 즉시 조치 필요</h3>
+                        <ul class="item-list" id="immediate-list"></ul>
+
+                        <!-- 권고사항 -->
+                        <h3 class="section-title">💡 권고사항</h3>
+                        <ul class="item-list" id="recommendation-list"></ul>
+                    </div>
+                </div>
+
+                <!-- 분석 기록 -->
+                <div class="card history-section">
+                    <h2>📜 분석 기록</h2>
+                    <div id="history-list">
+                        <p style="color: #888; text-align: center;">분석 기록이 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+
+        // 업로드 영역 이벤트
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImage = document.getElementById('preview-image');
+        const fileName = document.getElementById('file-name');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+                return;
+            }
+
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                fileName.textContent = file.name;
+                previewContainer.classList.add('active');
+                uploadArea.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function analyzeImage() {
+            if (!selectedFile) return;
+
+            const loading = document.getElementById('loading');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const resultSection = document.getElementById('result-section');
+            const resultPlaceholder = document.getElementById('result-placeholder');
+
+            loading.classList.add('active');
+            analyzeBtn.disabled = true;
+            resultPlaceholder.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                displayResults(data.analysis);
+                loadHistory();
+            } catch (error) {
+                alert('분석 중 오류가 발생했습니다: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function displayResults(analysis) {
+            const resultSection = document.getElementById('result-section');
+            resultSection.classList.add('active');
+
+            // 통과/불합격 상태
+            const statusContainer = document.getElementById('status-container');
+            const passStatus = analysis.pass_status !== false;
+            const riskLevel = analysis.overall_risk_level || 'medium';
+
+            statusContainer.innerHTML = `
+                <span class="status-badge ${passStatus ? 'status-pass' : 'status-fail'}">
+                    ${passStatus ? '✅ 규정 준수' : '❌ 개선 필요'}
+                </span>
+                <span class="risk-level risk-${riskLevel}">
+                    위험도: ${riskLevel.toUpperCase()}
+                </span>
+            `;
+
+            // 요약
+            const violations = analysis.violations || [];
+            const compliant = analysis.compliant_items || [];
+            document.getElementById('summary-grid').innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-number summary-pass">${compliant.length}</div>
+                    <div class="summary-label">준수 항목</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number summary-fail">${violations.length}</div>
+                    <div class="summary-label">위반 항목</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number summary-total">${compliant.length + violations.length}</div>
+                    <div class="summary-label">총 검사 항목</div>
+                </div>
+            `;
+
+            // 작업장 정보
+            document.getElementById('workplace-info').innerHTML = `
+                <h3>${analysis.workplace_type || '작업장'}</h3>
+                <p>${analysis.workplace_description || ''}</p>
+            `;
+
+            // 준수 사항
+            const compliantList = document.getElementById('compliant-list');
+            compliantList.innerHTML = compliant.map(item => `
+                <li class="compliant">
+                    <div class="item-category">${item.category || ''}</div>
+                    <div class="item-title">${item.item || ''}</div>
+                    <div class="item-description">${item.description || ''}</div>
+                </li>
+            `).join('') || '<li>준수 사항 없음</li>';
+
+            // 위반 사항
+            const violationList = document.getElementById('violation-list');
+            violationList.innerHTML = violations.map(item => `
+                <li class="violation">
+                    <div class="item-category">
+                        ${item.category || ''}
+                        <span class="severity-badge severity-${item.severity || 'medium'}">${item.severity || 'medium'}</span>
+                    </div>
+                    <div class="item-title">${item.item || ''}</div>
+                    <div class="item-description">${item.description || ''}</div>
+                    <div class="item-rule">📜 ${item.rule || ''}</div>
+                    ${item.recommendation ? `<div class="item-recommendation">💡 개선방안: ${item.recommendation}</div>` : ''}
+                </li>
+            `).join('') || '<li>위반 사항 없음</li>';
+
+            // 즉시 조치
+            const immediateActions = analysis.immediate_actions || [];
+            document.getElementById('immediate-list').innerHTML = immediateActions.map(action => `
+                <li style="border-left-color: #ff4444;">${action}</li>
+            `).join('') || '<li>즉시 조치 필요 사항 없음</li>';
+
+            // 권고사항
+            const recommendations = analysis.recommendations || [];
+            document.getElementById('recommendation-list').innerHTML = recommendations.map(rec => `
+                <li>${rec}</li>
+            `).join('') || '<li>추가 권고사항 없음</li>';
+        }
+
+        async function loadRegulations() {
+            try {
+                const response = await fetch('/api/regulations');
+                const data = await response.json();
+                const grid = document.getElementById('regulations-grid');
+
+                grid.innerHTML = Object.entries(data.regulations).map(([category, items]) => `
+                    <div class="regulation-card">
+                        <h4>${category}</h4>
+                        <ul>
+                            ${Object.keys(items).map(item => `<li>• ${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('규정 로드 실패:', error);
+            }
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/history');
+                const data = await response.json();
+                const historyList = document.getElementById('history-list');
+
+                if (data.history.length === 0) {
+                    historyList.innerHTML = '<p style="color: #888; text-align: center;">분석 기록이 없습니다.</p>';
+                    return;
+                }
+
+                historyList.innerHTML = data.history.slice(-5).reverse().map(item => `
+                    <div class="history-item">
+                        <div class="item-title">${item.content.file_info?.original_filename || '이미지'}</div>
+                        <div class="history-meta">
+                            <span>${item.content.analysis?.pass_status ? '✅ 통과' : '❌ 개선필요'}</span>
+                            <span>${new Date(item.created_at).toLocaleString('ko-KR')}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('기록 로드 실패:', error);
+            }
+        }
+
+        // 페이지 로드 시
+        loadRegulations();
+        loadHistory();
+    </script>
+</body>
+</html>
