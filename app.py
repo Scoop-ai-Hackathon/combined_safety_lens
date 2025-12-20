@@ -1206,28 +1206,20 @@ def get_detector():
     )
     return vision.HandLandmarker.create_from_options(options)
 
-# ==================== WebRTC Configuration ====================
+# WebRTC 설정
+RTC_CONFIGURATION = RTCConfiguration({"iceServers": [
+    {"urls": ["stun:stun.l.google.com:19302"]},
+    {"urls": ["turn:safetylens.store:3478"], "username": "webrtcuser", "credential": "webrtcpass"}
+]})
 
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [
-        {"urls": ["stun:stun.l.google.com:19302"]},
-        {"urls": ["turn:safetylens.store:3478"],
-         "username": "webrtcuser",
-         "credential": "webrtcpass"}
-    ]}
-)
-
-class WebRTCVideoProcessor(VideoProcessorBase):
+class FrameProcessor(VideoProcessorBase):
     def __init__(self):
         self.frame = None
         self.lock = threading.Lock()
-
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
-        img = frame.to_ndarray(format="bgr24")
         with self.lock:
-            self.frame = img.copy()
+            self.frame = frame.to_ndarray(format="bgr24")
         return frame
-
     def get_frame(self):
         with self.lock:
             return self.frame.copy() if self.frame is not None else None
@@ -1371,16 +1363,11 @@ def render_realtime_sentinel():
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
             return
 
-    # Active Monitoring Loop - WebRTC for deployment
+    # Active Monitoring Loop (WebRTC)
     ctx = webrtc_streamer(
-        key="safety-camera",
-        mode=WebRtcMode.SENDRECV,
-        rtc_configuration=RTC_CONFIGURATION,
-        video_processor_factory=WebRTCVideoProcessor,
-        media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
+        key="cam", mode=WebRtcMode.SENDRECV, rtc_configuration=RTC_CONFIGURATION,
+        video_processor_factory=FrameProcessor, media_stream_constraints={"video": True, "audio": False},
     )
-
     if not ctx.state.playing:
         video_ph.info("📷 카메라 연결 대기 중...")
         return
@@ -1399,10 +1386,7 @@ def render_realtime_sentinel():
 
     try:
         while st.session_state.monitor_active and ctx.state.playing:
-            if ctx.video_processor is None:
-                time.sleep(0.03)
-                continue
-            frame = ctx.video_processor.get_frame()
+            frame = ctx.video_processor.get_frame() if ctx.video_processor else None
             if frame is None:
                 time.sleep(0.03)
                 continue
@@ -1658,7 +1642,7 @@ def render_realtime_sentinel():
             video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 
     finally:
-        pass  # WebRTC handles cleanup
+        pass
 
 # ==================== Page 2: Image Analysis ====================
 
