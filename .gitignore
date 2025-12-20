@@ -14,5 +14,5 @@ venv/
 
 # Project Specific
 alarm.wav
-hand_landmarker.task
+
 *.log
