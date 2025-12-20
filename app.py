@@ -11,6 +11,9 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+import threading
+import av
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
 
 # Import MediaPipe Tasks API
 from mediapipe.tasks import python
@@ -1203,6 +1206,32 @@ def get_detector():
     )
     return vision.HandLandmarker.create_from_options(options)
 
+# ==================== WebRTC Configuration ====================
+
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {"urls": ["turn:safetylens.store:3478"],
+         "username": "webrtcuser",
+         "credential": "webrtcpass"}
+    ]}
+)
+
+class WebRTCVideoProcessor(VideoProcessorBase):
+    def __init__(self):
+        self.frame = None
+        self.lock = threading.Lock()
+
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        img = frame.to_ndarray(format="bgr24")
+        with self.lock:
+            self.frame = img.copy()
+        return frame
+
+    def get_frame(self):
+        with self.lock:
+            return self.frame.copy() if self.frame is not None else None
+
 # ==================== Page 1: Real-time Sentinel ====================
 
 def render_realtime_sentinel():
@@ -1342,12 +1371,18 @@ def render_realtime_sentinel():
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
             return
 
-    # Active Monitoring Loop
-    cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+    # Active Monitoring Loop - WebRTC for deployment
+    ctx = webrtc_streamer(
+        key="safety-camera",
+        mode=WebRtcMode.SENDRECV,
+        rtc_configuration=RTC_CONFIGURATION,
+        video_processor_factory=WebRTCVideoProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True,
+    )
 
-    if not cap.isOpened():
-        st.error(f"Could not access webcam at Index {camera_index}.")
-        st.session_state.monitor_active = False
+    if not ctx.state.playing:
+        video_ph.info("📷 카메라 연결 중... START 버튼을 눌러주세요.")
         return
 
     detector = get_detector()
@@ -1363,11 +1398,15 @@ def render_realtime_sentinel():
     squeeze_buffer = 0
 
     try:
-        while st.session_state.monitor_active:
-            ret, frame = cap.read()
-            if not ret:
-                st.error("Failed to retrieve frame.")
-                break
+        while st.session_state.monitor_active and ctx.state.playing:
+            # Get frame from WebRTC processor
+            if ctx.video_processor is None:
+                time.sleep(0.03)
+                continue
+            frame = ctx.video_processor.get_frame()
+            if frame is None:
+                time.sleep(0.03)
+                continue
 
             h, w, c = frame.shape
             small_w, small_h = 320, 240
@@ -1620,7 +1659,7 @@ def render_realtime_sentinel():
             video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 
     finally:
-        cap.release()
+        pass  # WebRTC handles cleanup automatically
 
 # ==================== Page 2: Image Analysis ====================
 
