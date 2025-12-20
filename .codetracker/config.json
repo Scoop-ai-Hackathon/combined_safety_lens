@@ -1,0 +1,72 @@
+{
+  "version": "3.0",
+  "server_url": "https://be.thinktrace.net",
+  "ignore_patterns": [
+    "*.pyc",
+    "__pycache__",
+    ".git",
+    ".codetracker",
+    ".claude",
+    "node_modules",
+    ".env",
+    "*.log",
+    ".DS_Store",
+    "*.class",
+    "*.o",
+    "build/",
+    "dist/",
+    "*.exe",
+    ".next/",
+    "out/",
+    "node_modules/",
+    ".env.local",
+    ".env.production",
+    ".env.development",
+    ".env.*.local",
+    ".vscode/",
+    ".idea/",
+    "venv/",
+    ".venv/",
+    "npm-debug.log*",
+    "yarn-debug.log*",
+    "yarn-error.log*",
+    ".claude/",
+    ".codetracker/"
+  ],
+  "track_extensions": [
+    ".py",
+    ".js",
+    ".java",
+    ".cpp",
+    ".c",
+    ".h",
+    ".cs",
+    ".go",
+    ".rs",
+    ".rb",
+    ".php",
+    ".ts",
+    ".jsx",
+    ".tsx",
+    ".vue",
+    ".swift",
+    ".kt",
+    ".md",
+    ".txt"
+  ],
+  "max_file_size": 1048576,
+  "auto_snapshot": {
+    "enabled": true,
+    "min_interval_seconds": 30,
+    "skip_patterns": [
+      "^help",
+      "^what is",
+      "^explain"
+    ],
+    "only_on_changes": false
+  },
+  "conversation_tracking":{                                                                                                                                   
+      "enabled": true,                                                                                                                                           
+      "max_entries_per_request": 100                                                                                                                             
+  }
+}
