@@ -18,7 +18,7 @@ import av
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-# WebRTC for browser camera access
+# WebRTC for browser camera access (deployment)
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
 
 # Load environment variables
@@ -1220,16 +1220,12 @@ class SafetyVideoProcessor(VideoProcessorBase):
         self.prev_hand_centroid = None
         self.motion_buffer = 0
         self.squeeze_buffer = 0
-
-        # Hazard counters
         self.pinch_frame_count = 0
         self.impact_frame_count = 0
         self.hazard_count_l = 0
         self.hazard_count_r = 0
         self.hazard_count_t = 0
         self.hazard_count_b = 0
-
-        # State
         self.current_status = "SAFE"
         self.hazard_latched = False
         self.captured_frame = None
@@ -1238,7 +1234,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
         self.lock = threading.Lock()
 
     def get_hazard_state(self):
-        """Get current hazard state (thread-safe)"""
         with self.lock:
             return {
                 "status": self.current_status,
@@ -1249,7 +1244,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
             }
 
     def reset_state(self):
-        """Reset hazard state"""
         with self.lock:
             self.pinch_frame_count = 0
             self.impact_frame_count = 0
@@ -1269,13 +1263,11 @@ class SafetyVideoProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(processed, format="bgr24")
 
     def process_frame(self, frame):
-        """Process a single frame for safety hazards"""
         h, w, c = frame.shape
         small_w, small_h = 320, 240
         frame_small = cv2.resize(frame, (small_w, small_h))
         gray_small = cv2.cvtColor(frame_small, cv2.COLOR_BGR2GRAY)
 
-        # If hazard is latched, show warning overlay
         if self.hazard_latched:
             cv2.putText(frame, "SYSTEM HALTED", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,255), 4)
             cv2.putText(frame, "PRESS 'RESET' TO RESUME", (50, 160), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 3)
@@ -1289,16 +1281,13 @@ class SafetyVideoProcessor(VideoProcessorBase):
             flow = cv2.calcOpticalFlowFarneback(self.prev_gray, gray_small, None, 0.5, 2, 10, 2, 5, 1.1, 0)
         self.prev_gray = gray_small
 
-        # Hand Detection
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         hand_detected = False
 
         if self.detector:
             mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame_rgb)
             detection_result = self.detector.detect(mp_image)
-
-            sx = small_w / w
-            sy = small_h / h
+            sx, sy = small_w / w, small_h / h
 
             if detection_result.hand_landmarks:
                 hand_detected = True
@@ -1307,10 +1296,8 @@ class SafetyVideoProcessor(VideoProcessorBase):
                     y_coords = [int(lm.y * h) for lm in hand_landmarks]
                     x_min, x_max = max(0, min(x_coords) - 30), min(w, max(x_coords) + 30)
                     y_min, y_max = max(0, min(y_coords) - 30), min(h, max(y_coords) + 30)
-
                     cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
 
-                    # Compression Detection
                     current_raw_area = (x_max - x_min) * (y_max - y_min)
                     compression_detected = False
                     current_area = 0.5 * current_raw_area + 0.5 * self.prev_hand_area if self.prev_hand_area else current_raw_area
@@ -1322,7 +1309,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
                             cv2.putText(frame, "SQUEEZE!", (x_min, y_min-30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                     self.prev_hand_area = current_area
 
-                    # Optical Flow Analysis
                     if flow is not None:
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
@@ -1339,7 +1325,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
 
                         l_x1, l_x2 = max(0, s_x_min - roi_w), s_x_min
                         r_x1, r_x2 = s_x_max, min(small_w, s_x_max + roi_w)
-
                         moving_pixels_left = moving_pixels_right = 0
                         moving_pixels_left_away = moving_pixels_right_away = 0
 
@@ -1357,11 +1342,9 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         left_active = (moving_pixels_left > pixel_thresh) and not translation_right and not suppress_hazards
                         right_active = (moving_pixels_right > pixel_thresh) and not translation_left and not suppress_hazards
 
-                        # Vertical
                         roi_h = int(100 * sy)
                         t_y1, t_y2 = max(0, s_y_min - roi_h), s_y_min
                         b_y1, b_y2 = s_y_max, min(small_h, s_y_max + roi_h)
-
                         moving_pixels_top = moving_pixels_bottom = 0
                         moving_pixels_top_away = moving_pixels_bottom_away = 0
 
@@ -1379,7 +1362,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         top_active = (moving_pixels_top > pixel_thresh) and not translation_down and not suppress_hazards
                         bottom_active = (moving_pixels_bottom > pixel_thresh) and not translation_up and not suppress_hazards
 
-                        # Hazard Detection
                         any_motion_active = left_active or right_active or top_active or bottom_active
                         if any_motion_active: self.motion_buffer = 5
                         if compression_detected: self.squeeze_buffer = 5
@@ -1390,7 +1372,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         strict_pincer = (left_active and right_active) or (top_active and bottom_active)
                         if strict_pincer: self.pinch_frame_count += 1
                         else: self.pinch_frame_count = 0
-
                         if buffered_trigger: self.impact_frame_count += 1
                         else: self.impact_frame_count = max(0, self.impact_frame_count - 1)
 
@@ -1408,7 +1389,6 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         if self.pinch_frame_count > 3: pinch_detected = True
                         if self.impact_frame_count > 12: pinch_detected = True
 
-        # Update State
         if pinch_detected:
             with self.lock:
                 self.current_status = "DANGER"
@@ -1427,7 +1407,7 @@ class SafetyVideoProcessor(VideoProcessorBase):
 
         return frame
 
-# WebRTC Configuration for STUN/TURN servers
+# WebRTC Configuration for STUN/TURN servers (coturn)
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [
         {"urls": ["stun:stun.l.google.com:19302"]},
@@ -1489,7 +1469,7 @@ def render_realtime_sentinel():
     col_video, col_dashboard = st.columns([1, 1])
 
     with col_dashboard:
-        # Reset button when hazard detected
+        # Reset button (shown when hazard detected)
         if st.session_state.hazard_latched:
             if st.button("⏹️ EMERGENCY STOP / RESET", type="secondary"):
                 st.session_state.monitor_active = False
@@ -1569,67 +1549,67 @@ def render_realtime_sentinel():
                     use_container_width=True
                 )
 
-            # Perform AI analysis if not done yet
-            if st.session_state.analyzing_incident and st.session_state.incident_analysis is None:
-                analysis_status_ph.info("🔍 AI 분석 중...")
-                try:
-                    regulations_fetcher = RegulationsFetcher()
-                    analysis_service = SafetyAnalysisService(regulations_fetcher)
-                    image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
-                    result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
-                    st.session_state.incident_analysis = result
+                # Perform AI analysis if not done yet
+                if st.session_state.analyzing_incident and st.session_state.incident_analysis is None:
+                    analysis_status_ph.info("🔍 AI 분석 중...")
+                    try:
+                        regulations_fetcher = RegulationsFetcher()
+                        analysis_service = SafetyAnalysisService(regulations_fetcher)
+                        image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
+                        result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
+                        st.session_state.incident_analysis = result
 
-                    # Generate HTML report
-                    html_content, report_id = generate_safety_report_html(
-                        result,
-                        st.session_state.captured_frame_base64,
-                        st.session_state.incident_time
+                        # Generate HTML report
+                        html_content, report_id = generate_safety_report_html(
+                            result,
+                            st.session_state.captured_frame_base64,
+                            st.session_state.incident_time
+                        )
+                        st.session_state.report_html = html_content
+                        st.session_state.report_id = report_id
+
+                        # Auto-save report to history
+                        report_manager = ReportManager()
+                        report_manager.save_report(
+                            report_id=report_id,
+                            html_content=html_content,
+                            analysis=result,
+                            incident_time=st.session_state.incident_time,
+                            capture_base64=st.session_state.captured_frame_base64
+                        )
+
+                        st.session_state.analyzing_incident = False
+                        analysis_status_ph.success("✅ 분석 완료! 보고서가 자동 저장되었습니다.")
+                    except Exception as e:
+                        analysis_status_ph.error(f"분석 오류: {str(e)}")
+                        st.session_state.analyzing_incident = False
+
+                # Display analysis result
+                if st.session_state.incident_analysis:
+                    result = st.session_state.incident_analysis
+                    risk_level = result.get("overall_risk_level", "high")
+                    violations = result.get("violations", [])
+                    risk_color = {'high': '#ff4444', 'medium': '#ffaa00', 'low': '#00ff88'}.get(risk_level, '#ff4444')
+
+                    analysis_result_ph.markdown(f"""
+                    <div class="analysis-box" style="background: rgba(255,68,68,0.15); padding: 25px; border-radius: 15px; border: 2px solid {risk_color};">
+                        <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위험도:</strong> <span style="color: {risk_color}; font-weight: bold; font-size: 1.6rem;">{risk_level.upper()}</span></p>
+                        <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위반 항목:</strong> <span style="color: #ff4444; font-weight: bold; font-size: 1.5rem;">{len(violations)}건</span></p>
+                        <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">작업장:</strong> {result.get('workplace_type', 'N/A')}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                # Download button for report (only render once using session state flag)
+                if st.session_state.report_html and not st.session_state.get('download_btn_rendered'):
+                    download_btn_ph.download_button(
+                        label="📥 보고서 다운로드 (HTML)",
+                        data=st.session_state.report_html,
+                        file_name=f"safety_report_{st.session_state.report_id}.html",
+                        mime="text/html",
+                        type="primary",
+                        key=f"download_report_{st.session_state.report_id}"
                     )
-                    st.session_state.report_html = html_content
-                    st.session_state.report_id = report_id
-
-                    # Auto-save report to history
-                    report_manager = ReportManager()
-                    report_manager.save_report(
-                        report_id=report_id,
-                        html_content=html_content,
-                        analysis=result,
-                        incident_time=st.session_state.incident_time,
-                        capture_base64=st.session_state.captured_frame_base64
-                    )
-
-                    st.session_state.analyzing_incident = False
-                    analysis_status_ph.success("✅ 분석 완료! 보고서가 자동 저장되었습니다.")
-                except Exception as e:
-                    analysis_status_ph.error(f"분석 오류: {str(e)}")
-                    st.session_state.analyzing_incident = False
-
-            # Display analysis result
-            if st.session_state.incident_analysis:
-                result = st.session_state.incident_analysis
-                risk_level = result.get("overall_risk_level", "high")
-                violations = result.get("violations", [])
-                risk_color = {'high': '#ff4444', 'medium': '#ffaa00', 'low': '#00ff88'}.get(risk_level, '#ff4444')
-
-                analysis_result_ph.markdown(f"""
-                <div class="analysis-box" style="background: rgba(255,68,68,0.15); padding: 25px; border-radius: 15px; border: 2px solid {risk_color};">
-                    <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위험도:</strong> <span style="color: {risk_color}; font-weight: bold; font-size: 1.6rem;">{risk_level.upper()}</span></p>
-                    <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위반 항목:</strong> <span style="color: #ff4444; font-weight: bold; font-size: 1.5rem;">{len(violations)}건</span></p>
-                    <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">작업장:</strong> {result.get('workplace_type', 'N/A')}</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-            # Download button for report
-            if st.session_state.report_html and not st.session_state.get('download_btn_rendered'):
-                download_btn_ph.download_button(
-                    label="📥 보고서 다운로드 (HTML)",
-                    data=st.session_state.report_html,
-                    file_name=f"safety_report_{st.session_state.report_id}.html",
-                    mime="text/html",
-                    type="primary",
-                    key=f"download_report_{st.session_state.report_id}"
-                )
-                st.session_state.download_btn_rendered = True
+                    st.session_state.download_btn_rendered = True
 
         else:
             st.session_state.current_status = "SAFE"
