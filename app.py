@@ -1304,7 +1304,8 @@ class SafetyVideoProcessor(VideoProcessorBase):
 
                     if self.prev_hand_area:
                         percent_change = (current_area - self.prev_hand_area) / self.prev_hand_area
-                        if percent_change < -0.05:
+                        # 민감도 향상: 압축 감지 임계값 낮춤
+                        if percent_change < -0.03:
                             compression_detected = True
                             cv2.putText(frame, "SQUEEZE!", (x_min, y_min-30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                     self.prev_hand_area = current_area
@@ -1313,7 +1314,8 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
                         roi_w = int(100 * sx)
-                        velocity_thresh, pixel_thresh = 4.0, 400
+                        # 민감도 향상: 임계값 낮춤
+                        velocity_thresh, pixel_thresh = 2.5, 200
 
                         current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                         suppress_hazards = False
@@ -1385,9 +1387,10 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         else: self.hazard_count_b = max(0, self.hazard_count_b - 1)
 
                         max_hazard = max(self.hazard_count_l, self.hazard_count_r, self.hazard_count_t, self.hazard_count_b)
-                        if max_hazard >= 10: pinch_detected = True
-                        if self.pinch_frame_count > 3: pinch_detected = True
-                        if self.impact_frame_count > 12: pinch_detected = True
+                        # 민감도 향상: 임계값 낮춤
+                        if max_hazard >= 6: pinch_detected = True
+                        if self.pinch_frame_count > 2: pinch_detected = True
+                        if self.impact_frame_count > 6: pinch_detected = True
 
         if pinch_detected:
             with self.lock:
@@ -1559,7 +1562,22 @@ def render_realtime_sentinel():
                     key=f"download_stopped_{st.session_state.report_id or 'none'}"
                 )
         else:
-            # WebRTC Streamer - 브라우저 카메라 사용
+            # WebRTC 자체 버튼 숨기기
+            st.markdown("""
+            <style>
+            [data-testid="stButton"] button[kind="secondary"] {
+                display: none !important;
+            }
+            .stButton button[data-testid="baseButton-secondary"] {
+                display: none !important;
+            }
+            div[data-testid="column"] button:has(svg) {
+                display: none !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
+            # WebRTC Streamer - 자동 시작
             ctx = webrtc_streamer(
                 key="safety-sentinel",
                 mode=WebRtcMode.SENDRECV,
@@ -1567,6 +1585,7 @@ def render_realtime_sentinel():
                 video_processor_factory=SafetyVideoProcessor,
                 media_stream_constraints={"video": True, "audio": False},
                 async_processing=True,
+                desired_playing_state=True,  # 자동 시작
             )
 
             # Store processor reference
