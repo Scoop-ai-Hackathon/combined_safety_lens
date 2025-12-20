@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 import threading, av
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
 
 # Import MediaPipe Tasks API
 from mediapipe.tasks import python
@@ -1214,18 +1214,18 @@ def get_detector():
     return vision.HandLandmarker.create_from_options(options)
 
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}, {"urls": ["turn:safetylens.store:3478"], "username": "webrtcuser", "credential": "webrtcpass"}]})
-class FrameProcessor(VideoProcessorBase):
-    def __init__(self):
-        self.frame = None
-        self.lock = threading.Lock()
-    def recv(self, frame):
-        img = frame.to_ndarray(format="bgr24")
-        with self.lock:
-            self.frame = img
-        return frame
-    def get_frame(self):
-        with self.lock:
-            return self.frame.copy() if self.frame is not None else None
+
+import queue
+frame_queue = queue.Queue(maxsize=2)
+
+def video_frame_callback(frame):
+    img = frame.to_ndarray(format="bgr24")
+    if not frame_queue.full():
+        try:
+            frame_queue.put_nowait(img)
+        except queue.Full:
+            pass
+    return frame
 
 # ==================== Page 1: Real-time Sentinel ====================
 
@@ -1371,14 +1371,17 @@ def render_realtime_sentinel():
         key="safety-cam",
         mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTC_CONFIGURATION,
-        video_processor_factory=FrameProcessor,
-        media_stream_constraints={"video": True, "audio": False},
+        video_frame_callback=video_frame_callback,
+        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 30}, "audio": False},
         desired_playing_state=st.session_state.monitor_active,
-        video_html_attrs={"style": {"display": "none"}},
         async_processing=True
     )
     if not ctx.state.playing:
         video_ph.info("📷 START 버튼을 누르면 카메라가 시작됩니다.")
+        # Clear queue when not playing
+        while not frame_queue.empty():
+            try: frame_queue.get_nowait()
+            except: pass
         return
 
     detector = get_detector()
@@ -1395,13 +1398,13 @@ def render_realtime_sentinel():
 
     try:
         while st.session_state.monitor_active and ctx.state.playing:
-            frame = ctx.video_processor.get_frame() if ctx.video_processor else None
-            if frame is None:
-                time.sleep(0.02)
+            try:
+                frame = frame_queue.get(timeout=0.1)
+            except queue.Empty:
                 continue
 
             h, w, c = frame.shape
-            small_w, small_h = 256, 192
+            small_w, small_h = 320, 240
             frame_small = cv2.resize(frame, (small_w, small_h))
             gray_small = cv2.cvtColor(frame_small, cv2.COLOR_BGR2GRAY)
 
@@ -1492,7 +1495,7 @@ def render_realtime_sentinel():
             pinch_detected = False
 
             if prev_gray is not None:
-                flow = cv2.calcOpticalFlowFarneback(prev_gray, gray_small, None, 0.5, 1, 8, 2, 5, 1.1, 0)
+                flow = cv2.calcOpticalFlowFarneback(prev_gray, gray_small, None, 0.5, 2, 10, 2, 5, 1.1, 0)
             prev_gray = gray_small
 
             # Hand Detection
@@ -1525,7 +1528,7 @@ def render_realtime_sentinel():
 
                         if prev_hand_area:
                             percent_change = (current_area - prev_hand_area) / prev_hand_area
-                            if percent_change < -0.03:
+                            if percent_change < -0.04:
                                 compression_detected = True
                                 cv2.putText(frame, "SQUEEZE!", (x_min, y_min-30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
                         prev_hand_area = current_area
@@ -1534,8 +1537,8 @@ def render_realtime_sentinel():
                         if 'flow' in locals():
                             s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                             s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
-                            roi_w = int(80 * sx)
-                            velocity_thresh, pixel_thresh = 2.5, 200
+                            roi_w = int(90 * sx)
+                            velocity_thresh, pixel_thresh = 3.5, 300
 
                             current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                             suppress_hazards = False
@@ -1566,7 +1569,7 @@ def render_realtime_sentinel():
                             right_active = (moving_pixels_right > pixel_thresh) and not translation_left and not suppress_hazards
 
                             # Vertical
-                            roi_h = int(80 * sy)
+                            roi_h = int(90 * sy)
                             t_y1, t_y2 = max(0, s_y_min - roi_h), s_y_min
                             b_y1, b_y2 = s_y_max, min(small_h, s_y_max + roi_h)
 
@@ -1589,8 +1592,8 @@ def render_realtime_sentinel():
 
                             # Hazard Detection
                             any_motion_active = left_active or right_active or top_active or bottom_active
-                            if any_motion_active: motion_buffer = 8
-                            if compression_detected: squeeze_buffer = 8
+                            if any_motion_active: motion_buffer = 6
+                            if compression_detected: squeeze_buffer = 6
                             motion_buffer = max(0, motion_buffer - 1)
                             squeeze_buffer = max(0, squeeze_buffer - 1)
                             buffered_trigger = (motion_buffer > 0) and (squeeze_buffer > 0)
@@ -1602,19 +1605,19 @@ def render_realtime_sentinel():
                             if buffered_trigger: st.session_state.impact_frame_count += 1
                             else: st.session_state.impact_frame_count = max(0, st.session_state.impact_frame_count - 1)
 
-                            if left_active: st.session_state.hazard_count_l += 3
+                            if left_active: st.session_state.hazard_count_l += 2
                             else: st.session_state.hazard_count_l = max(0, st.session_state.hazard_count_l - 1)
-                            if right_active: st.session_state.hazard_count_r += 3
+                            if right_active: st.session_state.hazard_count_r += 2
                             else: st.session_state.hazard_count_r = max(0, st.session_state.hazard_count_r - 1)
-                            if top_active: st.session_state.hazard_count_t += 3
+                            if top_active: st.session_state.hazard_count_t += 2
                             else: st.session_state.hazard_count_t = max(0, st.session_state.hazard_count_t - 1)
-                            if bottom_active: st.session_state.hazard_count_b += 3
+                            if bottom_active: st.session_state.hazard_count_b += 2
                             else: st.session_state.hazard_count_b = max(0, st.session_state.hazard_count_b - 1)
 
                             max_hazard = max(st.session_state.hazard_count_l, st.session_state.hazard_count_r, st.session_state.hazard_count_t, st.session_state.hazard_count_b)
-                            if max_hazard >= 6: pinch_detected = True
-                            if st.session_state.pinch_frame_count > 2: pinch_detected = True
-                            if st.session_state.impact_frame_count > 8: pinch_detected = True
+                            if max_hazard >= 8: pinch_detected = True
+                            if st.session_state.pinch_frame_count > 3: pinch_detected = True
+                            if st.session_state.impact_frame_count > 10: pinch_detected = True
 
             # Update State
             if pinch_detected:
