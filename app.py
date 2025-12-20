@@ -1615,6 +1615,9 @@ def render_realtime_sentinel():
                         log_msg = trigger_spoon_agent_incident()
                         st.session_state.incident_log.insert(0, log_msg)
 
+                        # 캡쳐 완료 후 UI 즉시 업데이트
+                        st.rerun()
+
                     # Display captured frame
                     if st.session_state.captured_frame is not None:
                         capture_ph.image(
@@ -1695,9 +1698,79 @@ def render_realtime_sentinel():
                 log_ph.markdown(f'<div class="log-area">{log_html}</div>', unsafe_allow_html=True)
 
             elif not ctx.state.playing:
-                # WebRTC 연결 대기 중
-                vehicle_status_ph.markdown('<div class="status-badge" style="border-color: #666; color: #666;">CONNECTING...</div>', unsafe_allow_html=True)
-                machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
+                # WebRTC 연결 대기 중 또는 hazard로 인해 중지됨
+                if st.session_state.hazard_latched:
+                    vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
+                    machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
+
+                    # 캡쳐본 표시
+                    if st.session_state.captured_frame is not None:
+                        capture_ph.image(
+                            cv2.cvtColor(st.session_state.captured_frame, cv2.COLOR_BGR2RGB),
+                            caption=f"Incident @ {st.session_state.incident_time}",
+                            use_container_width=True
+                        )
+
+                    # AI 분석 수행
+                    if st.session_state.analyzing_incident and st.session_state.incident_analysis is None:
+                        analysis_status_ph.info("🔍 AI 분석 중...")
+                        try:
+                            regulations_fetcher = RegulationsFetcher()
+                            analysis_service = SafetyAnalysisService(regulations_fetcher)
+                            image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
+                            result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
+                            st.session_state.incident_analysis = result
+
+                            html_content, report_id = generate_safety_report_html(
+                                result,
+                                st.session_state.captured_frame_base64,
+                                st.session_state.incident_time
+                            )
+                            st.session_state.report_html = html_content
+                            st.session_state.report_id = report_id
+
+                            report_manager = ReportManager()
+                            report_manager.save_report(
+                                report_id=report_id,
+                                html_content=html_content,
+                                analysis=result,
+                                incident_time=st.session_state.incident_time,
+                                capture_base64=st.session_state.captured_frame_base64
+                            )
+
+                            st.session_state.analyzing_incident = False
+                            analysis_status_ph.success("✅ 분석 완료! 보고서가 자동 저장되었습니다.")
+                        except Exception as e:
+                            analysis_status_ph.error(f"분석 오류: {str(e)}")
+                            st.session_state.analyzing_incident = False
+
+                    # 분석 결과 표시
+                    if st.session_state.incident_analysis:
+                        result = st.session_state.incident_analysis
+                        risk_level = result.get("overall_risk_level", "high")
+                        violations = result.get("violations", [])
+                        risk_color = {'high': '#ff4444', 'medium': '#ffaa00', 'low': '#00ff88'}.get(risk_level, '#ff4444')
+                        analysis_result_ph.markdown(f"""
+                        <div class="analysis-box" style="background: rgba(255,68,68,0.15); padding: 25px; border-radius: 15px; border: 2px solid {risk_color};">
+                            <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위험도:</strong> <span style="color: {risk_color}; font-weight: bold; font-size: 1.6rem;">{risk_level.upper()}</span></p>
+                            <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">위반 항목:</strong> <span style="color: #ff4444; font-weight: bold; font-size: 1.5rem;">{len(violations)}건</span></p>
+                            <p style="font-size: 1.4rem; margin: 15px 0;"><strong style="color: #00d4ff;">작업장:</strong> {result.get('workplace_type', 'N/A')}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    # 보고서 다운로드 버튼
+                    if st.session_state.report_html:
+                        download_btn_ph.download_button(
+                            label="📥 보고서 다운로드 (HTML)",
+                            data=st.session_state.report_html,
+                            file_name=f"safety_report_{st.session_state.report_id}.html",
+                            mime="text/html",
+                            type="primary",
+                            key=f"download_hazard_{st.session_state.report_id}"
+                        )
+                else:
+                    vehicle_status_ph.markdown('<div class="status-badge" style="border-color: #666; color: #666;">CONNECTING...</div>', unsafe_allow_html=True)
+                    machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
 
 # ==================== Page 2: Image Analysis ====================
 
