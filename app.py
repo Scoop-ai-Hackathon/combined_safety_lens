@@ -12,7 +12,6 @@ from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 import threading
-import queue
 import av
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase, RTCConfiguration
 
@@ -58,13 +57,6 @@ def load_css():
         <style>
         /* ===== Global Styles ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-
-        /* Hide WebRTC streamer box only */
-        iframe[title*="streamlit_webrtc"],
-        .css-1kyxreq:has(iframe[title*="webrtc"]) {
-            display: none !important;
-            height: 0 !important;
-        }
 
         .stApp {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -1216,17 +1208,9 @@ def get_detector():
 
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}, {"urls": ["turn:safetylens.store:3478"], "username": "webrtcuser", "credential": "webrtcpass"}]})
 
-# Frame queue for st.image() display
-frame_queue = queue.Queue(maxsize=2)
-
-def video_frame_callback(frame):
-    img = frame.to_ndarray(format="bgr24")
-    if not frame_queue.full():
-        try:
-            frame_queue.put_nowait(img)
-        except queue.Full:
-            pass
-    return frame
+# Shared state for detection
+detection_state = {"danger_detected": False, "captured_frame": None, "captured_base64": None}
+detection_lock = threading.Lock()
 
 class SafetyVideoProcessor(VideoProcessorBase):
     def __init__(self):
@@ -1531,176 +1515,83 @@ def render_realtime_sentinel():
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
             return
 
-    # Active Monitoring with WebRTC + st.image()
+    # WebRTC SENDRECV - video displayed directly, processing in callback
     ctx = webrtc_streamer(
         key="safety-cam",
-        mode=WebRtcMode.SENDONLY,
+        mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTC_CONFIGURATION,
-        video_frame_callback=video_frame_callback,
-        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 30}, "audio": False}
+        video_processor_factory=SafetyVideoProcessor,
+        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 30}, "audio": False},
+        async_processing=True
     )
 
     if not ctx.state.playing:
         video_ph.info("📷 START 버튼을 눌러 카메라를 시작하세요")
         return
 
-    detector = get_detector()
-    prev_gray = None
-    prev_hand_area = None
-    prev_hand_centroid = None
-    motion_buffer = 0
-    squeeze_buffer = 0
-    frame_skip = 0
+    # If hazard is latched, show the incident UI (don't run detection loop)
+    if st.session_state.get('hazard_latched'):
+        vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
+        machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
 
-    while st.session_state.monitor_active and ctx.state.playing:
-        # Clear old frames to get latest
-        latest_frame = None
-        while not frame_queue.empty():
+        if st.session_state.captured_frame is not None:
+            capture_ph.image(cv2.cvtColor(st.session_state.captured_frame, cv2.COLOR_BGR2RGB), caption=f"Incident @ {st.session_state.incident_time}", use_container_width=True)
+
+        if st.session_state.analyzing_incident and st.session_state.incident_analysis is None:
+            analysis_status_ph.info("🔍 AI 분석 중...")
             try:
-                latest_frame = frame_queue.get_nowait()
-            except queue.Empty:
-                break
+                regulations_fetcher = RegulationsFetcher()
+                analysis_service = SafetyAnalysisService(regulations_fetcher)
+                image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
+                result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
+                st.session_state.incident_analysis = result
+                html_content, report_id = generate_safety_report_html(result, st.session_state.captured_frame_base64, st.session_state.incident_time)
+                st.session_state.report_html = html_content
+                st.session_state.report_id = report_id
+                report_manager = ReportManager()
+                report_manager.save_report(report_id=report_id, html_content=html_content, analysis=result, incident_time=st.session_state.incident_time, capture_base64=st.session_state.captured_frame_base64)
+                st.session_state.analyzing_incident = False
+                analysis_status_ph.success("✅ 분석 완료!")
+                st.rerun()
+            except Exception as e:
+                analysis_status_ph.error(f"분석 오류: {str(e)}")
+                st.session_state.analyzing_incident = False
 
-        if latest_frame is None:
-            try:
-                latest_frame = frame_queue.get(timeout=0.05)
-            except queue.Empty:
-                continue
+        if st.session_state.incident_analysis:
+            result = st.session_state.incident_analysis
+            risk_level = result.get("overall_risk_level", "high")
+            violations = result.get("violations", [])
+            risk_color = {'high': '#ff4444', 'medium': '#ffaa00', 'low': '#00ff88'}.get(risk_level, '#ff4444')
+            analysis_result_ph.markdown(f'<div style="background:rgba(255,68,68,0.15);padding:20px;border-radius:10px;border:2px solid {risk_color};"><p><strong>위험도:</strong> <span style="color:{risk_color}">{risk_level.upper()}</span></p><p><strong>위반:</strong> {len(violations)}건</p></div>', unsafe_allow_html=True)
 
-        frame = latest_frame
-        h, w = frame.shape[:2]
-        small_w, small_h = 320, 240
-        frame_small = cv2.resize(frame, (small_w, small_h))
-        gray_small = cv2.cvtColor(frame_small, cv2.COLOR_BGR2GRAY)
-
-        # Hazard latched state
-        if st.session_state.get('hazard_latched'):
-            cv2.putText(frame, "SYSTEM HALTED", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,0,255), 4)
-            cv2.rectangle(frame, (0,0), (w,h), (0,0,255), 20)
-            video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
-            vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
-            machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
-            time.sleep(0.03)
-            continue
-
-        flow = None
-        if prev_gray is not None:
-            flow = cv2.calcOpticalFlowFarneback(prev_gray, gray_small, None, 0.5, 2, 10, 2, 5, 1.1, 0)
-        prev_gray = gray_small
-
-        pinch_detected = False
-        hand_detected = False
-
-        if detector:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame_rgb)
-            detection_result = detector.detect(mp_image)
-            sx, sy = small_w / w, small_h / h
-
-            if detection_result.hand_landmarks:
-                hand_detected = True
-                for hand_landmarks in detection_result.hand_landmarks:
-                    x_coords = [int(lm.x * w) for lm in hand_landmarks]
-                    y_coords = [int(lm.y * h) for lm in hand_landmarks]
-                    x_min, x_max = max(0, min(x_coords) - 30), min(w, max(x_coords) + 30)
-                    y_min, y_max = max(0, min(y_coords) - 30), min(h, max(y_coords) + 30)
-                    cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
-
-                    # Compression detection
-                    current_raw_area = (x_max - x_min) * (y_max - y_min)
-                    current_area = 0.5 * current_raw_area + 0.5 * prev_hand_area if prev_hand_area else current_raw_area
-                    compression_detected = False
-                    if prev_hand_area:
-                        if (current_area - prev_hand_area) / prev_hand_area < -0.04:
-                            compression_detected = True
-                    prev_hand_area = current_area
-
-                    # Optical flow analysis
-                    if flow is not None:
-                        s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
-                        s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
-                        roi_w, roi_h = int(90 * sx), int(90 * sy)
-                        velocity_thresh, pixel_thresh = 3.5, 320
-
-                        current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
-                        suppress_hazards = False
-                        if prev_hand_centroid:
-                            dist = np.sqrt((current_centroid[0]-prev_hand_centroid[0])**2 + (current_centroid[1]-prev_hand_centroid[1])**2)
-                            if dist > 25.0: suppress_hazards = True
-                        prev_hand_centroid = current_centroid
-
-                        l_x1, l_x2 = max(0, s_x_min - roi_w), s_x_min
-                        r_x1, r_x2 = s_x_max, min(small_w, s_x_max + roi_w)
-                        t_y1, t_y2 = max(0, s_y_min - roi_h), s_y_min
-                        b_y1, b_y2 = s_y_max, min(small_h, s_y_max + roi_h)
-
-                        left_active = right_active = top_active = bottom_active = False
-                        if l_x2 > l_x1:
-                            left_active = np.count_nonzero(flow[s_y_min:s_y_max, l_x1:l_x2, 0] > velocity_thresh) > pixel_thresh
-                        if r_x2 > r_x1:
-                            right_active = np.count_nonzero(flow[s_y_min:s_y_max, r_x1:r_x2, 0] < -velocity_thresh) > pixel_thresh
-                        if t_y2 > t_y1:
-                            top_active = np.count_nonzero(flow[t_y1:t_y2, s_x_min:s_x_max, 1] > velocity_thresh) > pixel_thresh
-                        if b_y2 > b_y1:
-                            bottom_active = np.count_nonzero(flow[b_y1:b_y2, s_x_min:s_x_max, 1] < -velocity_thresh) > pixel_thresh
-
-                        if suppress_hazards:
-                            left_active = right_active = top_active = bottom_active = False
-
-                        any_motion = left_active or right_active or top_active or bottom_active
-                        if any_motion: motion_buffer = 6
-                        if compression_detected: squeeze_buffer = 6
-                        motion_buffer = max(0, motion_buffer - 1)
-                        squeeze_buffer = max(0, squeeze_buffer - 1)
-
-                        if left_active: st.session_state.hazard_count_l += 2
-                        else: st.session_state.hazard_count_l = max(0, st.session_state.hazard_count_l - 1)
-                        if right_active: st.session_state.hazard_count_r += 2
-                        else: st.session_state.hazard_count_r = max(0, st.session_state.hazard_count_r - 1)
-                        if top_active: st.session_state.hazard_count_t += 2
-                        else: st.session_state.hazard_count_t = max(0, st.session_state.hazard_count_t - 1)
-                        if bottom_active: st.session_state.hazard_count_b += 2
-                        else: st.session_state.hazard_count_b = max(0, st.session_state.hazard_count_b - 1)
-
-                        max_hazard = max(st.session_state.hazard_count_l, st.session_state.hazard_count_r, st.session_state.hazard_count_t, st.session_state.hazard_count_b)
-                        if max_hazard >= 10: pinch_detected = True
-                        if (left_active and right_active) or (top_active and bottom_active):
-                            st.session_state.pinch_frame_count += 1
-                            if st.session_state.pinch_frame_count > 4: pinch_detected = True
-                        else:
-                            st.session_state.pinch_frame_count = max(0, st.session_state.pinch_frame_count - 1)
-
-        # Update state and display
-        if pinch_detected:
-            st.session_state.current_status = "DANGER"
-            st.session_state.hazard_latched = True
-            st.session_state.incident_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            _, buffer = cv2.imencode('.jpg', frame)
-            st.session_state.captured_frame = frame.copy()
-            st.session_state.captured_frame_base64 = base64.b64encode(buffer).decode('utf-8')
-            st.session_state.analyzing_incident = True
-            log_msg = trigger_spoon_agent_incident()
-            st.session_state.incident_log.insert(0, log_msg)
-            cv2.putText(frame, "DANGER!", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 4)
-            cv2.rectangle(frame, (0, 0), (w, h), (0, 0, 255), 8)
-        elif hand_detected:
-            st.session_state.current_status = "SAFE"
-            cv2.putText(frame, "Hand Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
-        else:
-            st.session_state.current_status = "SAFE"
-            cv2.putText(frame, "ZONE CLEAR", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (100, 255, 100), 2)
-
-        # Render
-        if st.session_state.current_status == "SAFE":
-            vehicle_status_ph.markdown('<div class="status-badge status-safe">OPERATIONAL</div>', unsafe_allow_html=True)
-            machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon spinning">⚙️</div></div>', unsafe_allow_html=True)
-        else:
-            vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
-            machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
+        if st.session_state.report_html:
+            download_btn_ph.download_button("📥 보고서 다운로드", st.session_state.report_html, f"report_{st.session_state.report_id}.html", "text/html", key=f"dl_{st.session_state.report_id}")
 
         log_html = "<br>".join([f"• {msg}" for msg in st.session_state.incident_log[:5]])
         log_ph.markdown(f'<div class="log-area">{log_html}</div>', unsafe_allow_html=True)
-        video_ph.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
+        return
+
+    # Normal monitoring - show OPERATIONAL status
+    vehicle_status_ph.markdown('<div class="status-badge status-safe">OPERATIONAL</div>', unsafe_allow_html=True)
+    machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon spinning">⚙️</div></div>', unsafe_allow_html=True)
+    log_html = "<br>".join([f"• {msg}" for msg in st.session_state.incident_log[:5]])
+    log_ph.markdown(f'<div class="log-area">{log_html}</div>', unsafe_allow_html=True)
+
+    # Continuous monitoring loop for DANGER detection
+    while ctx.state.playing and st.session_state.monitor_active:
+        with detection_lock:
+            if detection_state.get("danger_detected"):
+                st.session_state.hazard_latched = True
+                st.session_state.current_status = "DANGER"
+                st.session_state.incident_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                st.session_state.captured_frame = detection_state.get("captured_frame")
+                st.session_state.captured_frame_base64 = detection_state.get("captured_base64")
+                st.session_state.analyzing_incident = True
+                log_msg = trigger_spoon_agent_incident()
+                st.session_state.incident_log.insert(0, log_msg)
+                detection_state["danger_detected"] = False
+                st.rerun()
+        time.sleep(0.1)
 
 # ==================== Page 2: Image Analysis ====================
 
