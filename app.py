@@ -58,14 +58,6 @@ def load_css():
         /* ===== Global Styles ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-        /* Hide WebRTC container */
-        [data-testid="stVerticalBlock"] > div:has(iframe[title*="webrtc"]),
-        .stWebRtc, div[data-testid="stWebRtc"] {
-            display: none !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-
         .stApp {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             font-family: 'Noto Sans KR', 'Segoe UI', sans-serif;
