@@ -1282,7 +1282,7 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
                         roi_w = int(90 * sx)
-                        velocity_thresh, pixel_thresh = 3.5, 300
+                        velocity_thresh, pixel_thresh = 3.2, 270
 
                         current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                         suppress_hazards = False
@@ -1357,7 +1357,7 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         else: self.hazard_count_b = max(0, self.hazard_count_b - 1)
 
                         max_hazard = max(self.hazard_count_l, self.hazard_count_r, self.hazard_count_t, self.hazard_count_b)
-                        if max_hazard >= 8: pinch_detected = True
+                        if max_hazard >= 7: pinch_detected = True
                         if self.pinch_frame_count > 3: pinch_detected = True
                         if self.impact_frame_count > 10: pinch_detected = True
 
@@ -1520,19 +1520,26 @@ def render_realtime_sentinel():
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
             return
 
-    # Active Monitoring with WebRTC - video displayed directly by WebRTC
-    ctx = webrtc_streamer(
-        key="safety-cam",
-        mode=WebRtcMode.SENDRECV,
-        rtc_configuration=RTC_CONFIGURATION,
-        video_processor_factory=SafetyVideoProcessor,
-        media_stream_constraints={"video": {"width": 640, "height": 480, "frameRate": 30}, "audio": False},
-        async_processing=True
-    )
+        # Active Monitoring with WebRTC - video displayed directly by WebRTC
+        st.markdown("""
+        <style>
+        .stWebrtc video { max-width: 320px !important; max-height: 240px !important; }
+        [data-testid="stWebrtc"] { max-width: 350px !important; }
+        </style>
+        """, unsafe_allow_html=True)
 
-    if not ctx.state.playing:
-        video_ph.info("📷 START 버튼을 눌러 카메라를 시작하세요")
-        return
+        ctx = webrtc_streamer(
+            key="safety-cam",
+            mode=WebRtcMode.SENDRECV,
+            rtc_configuration=RTC_CONFIGURATION,
+            video_processor_factory=SafetyVideoProcessor,
+            media_stream_constraints={"video": {"width": 320, "height": 240, "frameRate": 30}, "audio": False},
+            async_processing=True
+        )
+
+        if not ctx.state.playing:
+            video_ph.info("📷 START 버튼을 눌러 카메라를 시작하세요")
+            return
 
     # Check detection state and update UI
     with detection_lock:
