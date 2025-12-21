@@ -1433,46 +1433,58 @@ def render_realtime_sentinel():
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
             return
 
-    # WebRTC Camera (works in deployment)
+    # WebRTC Camera (SENDONLY mode - display via st.image)
     with col_video:
+        # Hide WebRTC video element with CSS
+        st.markdown("""
+            <style>
+            video { display: none !important; }
+            .stVideo { display: none !important; }
+            </style>
+        """, unsafe_allow_html=True)
+
         ctx = webrtc_streamer(
             key="safety-cam",
-            mode=WebRtcMode.SENDRECV,
+            mode=WebRtcMode.SENDONLY,
             rtc_configuration=RTC_CONFIG,
             video_processor_factory=SafetyVideoProcessor,
             media_stream_constraints={"video": True, "audio": False},
         )
 
-        # Display processed frame with st.image
         frame_placeholder = st.empty()
 
-        if ctx.video_processor:
-            vp = ctx.video_processor
+        # st.image display loop
+        while ctx.state.playing:
+            if ctx.video_processor:
+                vp = ctx.video_processor
 
-            # Check for incident
-            if vp.hazard_latched and vp.incident_frame is not None:
-                if not st.session_state.get('hazard_latched'):
-                    st.session_state.hazard_latched = True
-                    st.session_state.captured_frame = vp.incident_frame
-                    st.session_state.incident_time = datetime.now().strftime("%H:%M:%S")
-                    _, buf = cv2.imencode(".jpg", vp.incident_frame)
-                    st.session_state.captured_frame_base64 = base64.b64encode(buf).decode()
-                    st.session_state.analyzing_incident = True
+                # Check for incident
+                if vp.hazard_latched and vp.incident_frame is not None:
+                    if not st.session_state.get('hazard_latched'):
+                        st.session_state.hazard_latched = True
+                        st.session_state.captured_frame = vp.incident_frame
+                        st.session_state.incident_time = datetime.now().strftime("%H:%M:%S")
+                        _, buf = cv2.imencode(".jpg", vp.incident_frame)
+                        st.session_state.captured_frame_base64 = base64.b64encode(buf).decode()
+                        st.session_state.analyzing_incident = True
 
-                    # Save capture
-                    capture_path = CAPTURES_DIR / f"incident_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
-                    cv2.imwrite(str(capture_path), vp.incident_frame)
+                        # Save capture
+                        capture_path = CAPTURES_DIR / f"incident_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+                        cv2.imwrite(str(capture_path), vp.incident_frame)
 
-                    vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
-                    machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
-                    st.rerun()
-            elif vp.frame is not None:
-                frame_placeholder.image(cv2.cvtColor(vp.frame, cv2.COLOR_BGR2RGB), channels="RGB", use_container_width=True)
-                if not vp.hazard_latched:
-                    vehicle_status_ph.markdown('<div class="status-badge status-safe">✅ OPERATING</div>', unsafe_allow_html=True)
-                    machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon spinning">⚙️</div></div>', unsafe_allow_html=True)
+                        vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
+                        machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
+                        st.rerun()
 
-    # Return here - no more cv2.VideoCapture loop needed
+                # Display frame with st.image
+                if vp.frame is not None:
+                    frame_placeholder.image(cv2.cvtColor(vp.frame, cv2.COLOR_BGR2RGB), channels="RGB", use_container_width=True)
+                    if not vp.hazard_latched:
+                        vehicle_status_ph.markdown('<div class="status-badge status-safe">✅ OPERATING</div>', unsafe_allow_html=True)
+                        machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon spinning">⚙️</div></div>', unsafe_allow_html=True)
+
+            time.sleep(0.03)
+
     return
 
     # === LEGACY CODE BELOW (kept for reference but not executed) ===
