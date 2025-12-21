@@ -59,14 +59,11 @@ def load_css():
         /* ===== Global Styles ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-        /* Hide WebRTC white box */
-        [data-testid="stVerticalBlock"] > div:has(iframe),
-        .stWebrtc, [data-testid="stWebrtc"] {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            overflow: hidden !important;
-            opacity: 0 !important;
+        /* Hide WebRTC streamer box only */
+        iframe[title*="streamlit_webrtc"],
+        .css-1kyxreq:has(iframe[title*="webrtc"]) {
+            display: none !important;
+            height: 0 !important;
         }
 
         .stApp {
