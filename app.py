@@ -43,9 +43,17 @@ if not os.getenv("OPENAI_API_KEY") and os.getenv("OPENROUTER_API_KEY"):
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "google/gemini-2.0-flash-001")
 
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-)
+# Enhanced RTC configuration for EC2/Cloud deployment
+# Multiple STUN servers for better NAT traversal and reliability
+RTC_CONFIGURATION = RTCConfiguration({
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {"urls": ["stun:stun1.l.google.com:19302"]},
+        {"urls": ["stun:stun2.l.google.com:19302"]},
+        {"urls": ["stun:stun3.l.google.com:19302"]},
+        {"urls": ["stun:stun4.l.google.com:19302"]},
+    ]
+})
 
 st.set_page_config(page_title="Safety Lens (WebRTC + SpoonOS)", layout="wide")
 

@@ -20,3 +20,6 @@ httpx>=0.24.0
 
 # Environment Management
 python-dotenv>=1.0.0
+
+# SpoonOS (LLM Agent for Report Generation)
+spoon-ai>=0.1.0
