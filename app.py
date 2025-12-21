@@ -1395,17 +1395,54 @@ def render_realtime_sentinel():
         video_ph = st.empty()
         if not st.session_state.monitor_active:
             if st.session_state.get("current_status") == "DANGER":
-                video_ph.error("🚨 EMERGENCY STOP TRIGGERED. PRESS START TO RESET.")
+                video_ph.error("🚨 DANGER DETECTED - SYSTEM STOPPED")
                 vehicle_status_ph.markdown('<div class="status-badge status-danger">🚫 STOPPED</div>', unsafe_allow_html=True)
                 machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon stopped">⚙️</div></div>', unsafe_allow_html=True)
 
-                # Show captured incident and report download when stopped
+                # Show captured incident
                 if st.session_state.captured_frame is not None:
                     capture_ph.image(
                         cv2.cvtColor(st.session_state.captured_frame, cv2.COLOR_BGR2RGB),
                         caption=f"Incident @ {st.session_state.incident_time}",
                         use_container_width=True
                     )
+
+                # Run AI analysis if pending
+                if st.session_state.get('analyzing_incident') and st.session_state.incident_analysis is None:
+                    analysis_status_ph.info("🔍 AI 분석 중...")
+                    try:
+                        regulations_fetcher = RegulationsFetcher()
+                        analysis_service = SafetyAnalysisService(regulations_fetcher)
+                        image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
+                        result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
+                        st.session_state.incident_analysis = result
+
+                        # Generate HTML report
+                        html_content, report_id = generate_safety_report_html(
+                            result,
+                            st.session_state.captured_frame_base64,
+                            st.session_state.incident_time
+                        )
+                        st.session_state.report_html = html_content
+                        st.session_state.report_id = report_id
+
+                        # Auto-save report
+                        report_manager = ReportManager()
+                        report_manager.save_report(
+                            report_id=report_id,
+                            html_content=html_content,
+                            analysis=result,
+                            incident_time=st.session_state.incident_time,
+                            capture_base64=st.session_state.captured_frame_base64
+                        )
+                        st.session_state.analyzing_incident = False
+                        analysis_status_ph.success("✅ 분석 완료!")
+                        st.rerun()
+                    except Exception as e:
+                        analysis_status_ph.error(f"분석 오류: {str(e)}")
+                        st.session_state.analyzing_incident = False
+
+                # Show analysis results
                 if st.session_state.incident_analysis:
                     result = st.session_state.incident_analysis
                     risk_level = result.get("overall_risk_level", "high")
@@ -1462,6 +1499,8 @@ def render_realtime_sentinel():
                 if vp.hazard_latched and vp.incident_frame is not None:
                     if not st.session_state.get('hazard_latched'):
                         st.session_state.hazard_latched = True
+                        st.session_state.monitor_active = False  # Stop monitoring
+                        st.session_state.current_status = "DANGER"
                         st.session_state.captured_frame = vp.incident_frame
                         st.session_state.incident_time = datetime.now().strftime("%H:%M:%S")
                         _, buf = cv2.imencode(".jpg", vp.incident_frame)
@@ -1484,6 +1523,62 @@ def render_realtime_sentinel():
                         machine_anim_ph.markdown('<div class="machine-container"><div class="gear-icon spinning">⚙️</div></div>', unsafe_allow_html=True)
 
             time.sleep(0.03)
+
+    # Handle analysis after hazard detection (triggered by st.rerun)
+    if st.session_state.get('hazard_latched') and st.session_state.get('analyzing_incident'):
+        if st.session_state.incident_analysis is None:
+            analysis_status_ph.info("🔍 AI 분석 중...")
+            try:
+                regulations_fetcher = RegulationsFetcher()
+                analysis_service = SafetyAnalysisService(regulations_fetcher)
+                image_bytes = base64.b64decode(st.session_state.captured_frame_base64)
+                result = analysis_service.analyze_image_bytes(image_bytes, "incident_capture.jpg")
+                st.session_state.incident_analysis = result
+
+                # Generate HTML report
+                html_content, report_id = generate_safety_report_html(
+                    result,
+                    st.session_state.captured_frame_base64,
+                    st.session_state.incident_time
+                )
+                st.session_state.report_html = html_content
+                st.session_state.report_id = report_id
+
+                # Auto-save report
+                report_manager = ReportManager()
+                report_manager.save_report(
+                    report_id=report_id,
+                    html_content=html_content,
+                    analysis=result,
+                    incident_time=st.session_state.incident_time,
+                    capture_base64=st.session_state.captured_frame_base64
+                )
+
+                st.session_state.analyzing_incident = False
+                analysis_status_ph.success("✅ 분석 완료!")
+
+                # Show results
+                risk_level = result.get("overall_risk_level", "high")
+                violations = result.get("violations", [])
+                risk_color = {'high': '#ff4444', 'medium': '#ffaa00', 'low': '#00ff88'}.get(risk_level, '#ff4444')
+                analysis_result_ph.markdown(f"""
+                <div style="background: rgba(255,68,68,0.15); padding: 20px; border-radius: 15px; border: 2px solid {risk_color};">
+                    <p><strong>위험도:</strong> <span style="color: {risk_color};">{risk_level.upper()}</span></p>
+                    <p><strong>위반 항목:</strong> {len(violations)}건</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                # Download button
+                download_btn_ph.download_button(
+                    label="📥 보고서 다운로드",
+                    data=st.session_state.report_html,
+                    file_name=f"safety_report_{report_id}.html",
+                    mime="text/html",
+                    type="primary"
+                )
+            except Exception as e:
+                analysis_status_ph.error(f"분석 오류: {str(e)}")
+                st.session_state.analyzing_incident = False
 
     return
 
