@@ -19,7 +19,22 @@ from mediapipe.tasks.python import vision
 # WebRTC for deployment camera access
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration, WebRtcMode
 
-RTC_CONFIG = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
+# STUN + TURN server configuration (safetylens.store coturn)
+RTC_CONFIG = RTCConfiguration({
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {
+            "urls": ["turn:safetylens.store:3478"],
+            "username": "webrtcuser",
+            "credential": "webrtcpass"
+        },
+        {
+            "urls": ["turn:safetylens.store:3478?transport=tcp"],
+            "username": "webrtcuser",
+            "credential": "webrtcpass"
+        },
+    ]
+})
 
 # Load environment variables
 load_dotenv()
