@@ -59,6 +59,16 @@ def load_css():
         /* ===== Global Styles ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
+        /* Hide WebRTC white box */
+        [data-testid="stVerticalBlock"] > div:has(iframe),
+        .stWebrtc, [data-testid="stWebrtc"] {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+        }
+
         .stApp {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             font-family: 'Noto Sans KR', 'Segoe UI', sans-serif;
@@ -1286,7 +1296,7 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
                         roi_w = int(90 * sx)
-                        velocity_thresh, pixel_thresh = 3.2, 270
+                        velocity_thresh, pixel_thresh = 3.5, 320
 
                         current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                         suppress_hazards = False
@@ -1361,9 +1371,9 @@ class SafetyVideoProcessor(VideoProcessorBase):
                         else: self.hazard_count_b = max(0, self.hazard_count_b - 1)
 
                         max_hazard = max(self.hazard_count_l, self.hazard_count_r, self.hazard_count_t, self.hazard_count_b)
-                        if max_hazard >= 7: pinch_detected = True
-                        if self.pinch_frame_count > 3: pinch_detected = True
-                        if self.impact_frame_count > 10: pinch_detected = True
+                        if max_hazard >= 10: pinch_detected = True
+                        if self.pinch_frame_count > 4: pinch_detected = True
+                        if self.impact_frame_count > 12: pinch_detected = True
 
         # Draw status on frame
         if pinch_detected:
@@ -1543,13 +1553,24 @@ def render_realtime_sentinel():
     prev_hand_centroid = None
     motion_buffer = 0
     squeeze_buffer = 0
+    frame_skip = 0
 
     while st.session_state.monitor_active and ctx.state.playing:
-        try:
-            frame = frame_queue.get(timeout=0.1)
-        except queue.Empty:
-            continue
+        # Clear old frames to get latest
+        latest_frame = None
+        while not frame_queue.empty():
+            try:
+                latest_frame = frame_queue.get_nowait()
+            except queue.Empty:
+                break
 
+        if latest_frame is None:
+            try:
+                latest_frame = frame_queue.get(timeout=0.05)
+            except queue.Empty:
+                continue
+
+        frame = latest_frame
         h, w = frame.shape[:2]
         small_w, small_h = 320, 240
         frame_small = cv2.resize(frame, (small_w, small_h))
@@ -1602,7 +1623,7 @@ def render_realtime_sentinel():
                         s_x_min, s_x_max = int(x_min * sx), int(x_max * sx)
                         s_y_min, s_y_max = int(y_min * sy), int(y_max * sy)
                         roi_w, roi_h = int(90 * sx), int(90 * sy)
-                        velocity_thresh, pixel_thresh = 3.2, 270
+                        velocity_thresh, pixel_thresh = 3.5, 320
 
                         current_centroid = ((x_min + x_max)//2, (y_min + y_max)//2)
                         suppress_hazards = False
@@ -1645,12 +1666,12 @@ def render_realtime_sentinel():
                         else: st.session_state.hazard_count_b = max(0, st.session_state.hazard_count_b - 1)
 
                         max_hazard = max(st.session_state.hazard_count_l, st.session_state.hazard_count_r, st.session_state.hazard_count_t, st.session_state.hazard_count_b)
-                        if max_hazard >= 7: pinch_detected = True
+                        if max_hazard >= 10: pinch_detected = True
                         if (left_active and right_active) or (top_active and bottom_active):
                             st.session_state.pinch_frame_count += 1
-                            if st.session_state.pinch_frame_count > 3: pinch_detected = True
+                            if st.session_state.pinch_frame_count > 4: pinch_detected = True
                         else:
-                            st.session_state.pinch_frame_count = 0
+                            st.session_state.pinch_frame_count = max(0, st.session_state.pinch_frame_count - 1)
 
         # Update state and display
         if pinch_detected:
