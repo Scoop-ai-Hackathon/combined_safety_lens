@@ -1282,11 +1282,11 @@ class SafetyVideoProcessor(VideoProcessorBase):
             self.hazard_count = max(0, self.hazard_count - 1)
 
         if hand_detected:
-            cv2.putText(img, f"MONITORING - Hazard: {self.hazard_count}/6", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2)
+            cv2.putText(img, f"MONITORING - Hazard: {self.hazard_count}/4", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2)
         else:
             cv2.putText(img, "ZONE CLEAR", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (100,255,100), 2)
 
-        if self.hazard_count >= 6 and not self.hazard_latched:
+        if self.hazard_count >= 4 and not self.hazard_latched:
             self.hazard_latched = True
             self.incident_frame = img.copy()
             cv2.putText(img, "DANGER!", (30,80), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 3)
