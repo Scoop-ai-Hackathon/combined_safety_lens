@@ -1282,11 +1282,11 @@ class SafetyVideoProcessor(VideoProcessorBase):
             self.hazard_count = max(0, self.hazard_count - 1)
 
         if hand_detected:
-            cv2.putText(img, f"MONITORING - Hazard: {self.hazard_count}/10", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2)
+            cv2.putText(img, f"MONITORING - Hazard: {self.hazard_count}/6", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2)
         else:
             cv2.putText(img, "ZONE CLEAR", (30,40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (100,255,100), 2)
 
-        if self.hazard_count >= 10 and not self.hazard_latched:
+        if self.hazard_count >= 6 and not self.hazard_latched:
             self.hazard_latched = True
             self.incident_frame = img.copy()
             cv2.putText(img, "DANGER!", (30,80), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0,0,255), 3)
@@ -1472,11 +1472,13 @@ def render_realtime_sentinel():
 
     # WebRTC Camera (SENDONLY mode - display via st.image)
     with col_video:
-        # Hide WebRTC video element with CSS
+        # Hide WebRTC video element and buttons with CSS
         st.markdown("""
             <style>
             video { display: none !important; }
             .stVideo { display: none !important; }
+            [data-testid="stWebRtcStreamer"] button { display: none !important; }
+            [data-testid="stWebRtcStreamer"] > div:first-child { display: none !important; }
             </style>
         """, unsafe_allow_html=True)
 
@@ -1486,6 +1488,7 @@ def render_realtime_sentinel():
             rtc_configuration=RTC_CONFIG,
             video_processor_factory=SafetyVideoProcessor,
             media_stream_constraints={"video": True, "audio": False},
+            desired_playing_state=True,  # Auto-start camera
         )
 
         frame_placeholder = st.empty()
